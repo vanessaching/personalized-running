@@ -672,7 +672,8 @@
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
-    document.getElementById('user-pill').textContent = user.user_metadata?.display_name || user.email.split('@')[0];
+    const pillName = user.user_metadata?.display_name || user.email.split('@')[0];
+    document.getElementById('user-pill').childNodes[0].textContent = pillName;
     loadDashboard();
     loadStretchGrid('pre');
     loadProgress();

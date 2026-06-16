@@ -476,8 +476,8 @@
 <script>
   const STRAVA_CLIENT_ID = '258624';
   const STRAVA_REDIRECT = 'https://vanessaching.github.io/personalized-running/run.html';
-  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  const SUPABASE_URL = 'https://trsrsplijzjmytmooyyi.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyc3JzcGxpanpqbXl0bW9veXlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MjkyNTgsImV4cCI6MjA5NzIwNTI1OH0.TiC-0Eid8Btii-x4XBbhEVO63dHDN90gcbWKDjRGZNs';
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -604,8 +604,11 @@
     e.stopPropagation();
     document.getElementById('profile-dropdown').classList.toggle('open');
   }
-  document.addEventListener('click', () => {
-    document.getElementById('profile-dropdown')?.classList.remove('open');
+  document.addEventListener('click', (e) => {
+    if (document.getElementById('app-screen').style.display === 'none') return;
+    if (!e.target.closest('#user-pill')) {
+      document.getElementById('profile-dropdown')?.classList.remove('open');
+    }
   });
 
   function populateProfile(user) {

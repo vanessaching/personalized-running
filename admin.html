@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>run · admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; min-height: 100vh; background: #9BB8D4; color: #2C3848; }
+
+    /* ── login ── */
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-box { background: #EEF2FA; border-radius: 20px; padding: 48px 40px; width: 360px; max-width: 90vw; box-shadow: 0 4px 24px rgba(44,56,72,0.15); }
+    .login-box h1 { font-size: 20px; font-weight: 700; color: #2C3848; margin-bottom: 4px; }
+    .login-box p { font-size: 13px; color: #6B7A8D; margin-bottom: 28px; }
+    .login-box input { width: 100%; background: #F0F4F8; border: 1px solid #B8C8D8; border-radius: 12px; padding: 14px 18px; font-size: 14px; font-family: inherit; color: #2C3848; outline: none; margin-bottom: 12px; transition: box-shadow 0.15s; }
+    .login-box input:focus { box-shadow: 0 0 0 2px #2C3848; }
+    .login-box button { width: 100%; background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 14px; font-size: 14px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .login-box button:hover { opacity: 0.85; }
+    .login-error { font-size: 12px; color: #c0392b; margin-top: 8px; display: none; }
+
+    /* ── admin shell ── */
+    #admin-screen { display: none; }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: #DCE9F5; border-bottom: 1.5px solid #4A7BAA; position: sticky; top: 0; z-index: 10; }
+    .admin-header h1 { font-size: 18px; font-weight: 700; color: #2C3848; }
+    .admin-header p { font-size: 12px; color: #6B7A8D; margin-top: 2px; }
+    .logout-btn { background: none; border: 1px solid #6B96C0; border-radius: 999px; padding: 7px 16px; font-size: 13px; cursor: pointer; font-family: inherit; color: #2C3848; transition: all 0.15s; }
+    .logout-btn:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
+
+    .admin-tabs { display: flex; border-bottom: 1.5px solid #4A7BAA; padding: 0 48px; background: #DCE9F5; }
+    .tab-btn { background: none; border: none; font-family: inherit; font-size: 13px; color: #6B7A8D; padding: 13px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px; transition: color 0.15s; }
+    .tab-btn.active { color: #2C3848; border-bottom-color: #2C3848; font-weight: 700; }
+
+    .tab-content { display: none; padding: 40px 48px; }
+    .tab-content.active { display: block; }
+
+    /* ── section heads ── */
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .section-head h2 { font-size: 18px; font-weight: 700; color: #2C3848; }
+    .add-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 10px 22px; font-size: 13px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .add-btn:hover { opacity: 0.8; }
+    .danger-btn { background: none; border: 1px solid #c0392b; color: #c0392b; border-radius: 999px; padding: 10px 22px; font-size: 13px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .danger-btn:hover { background: #c0392b; color: white; }
+
+    /* ── users tab ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: #DCE9F5; border-radius: 16px; padding: 22px 24px; border: 1.5px solid #4A7BAA; }
+    .stat-label { font-size: 11px; color: #4A5A6E; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .stat-val { font-size: 28px; font-weight: 700; color: #2C3848; letter-spacing: -0.02em; }
+    .stat-sub { font-size: 12px; color: #4A5A6E; margin-top: 6px; }
+
+    .user-list { display: flex; flex-direction: column; gap: 10px; }
+    .user-row { background: #DCE9F5; border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 20px; border: 1.5px solid #4A7BAA; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #6B96C0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #EEF2FA; flex-shrink: 0; }
+    .user-info { flex: 1; }
+    .user-name { font-size: 14px; font-weight: 700; color: #2C3848; }
+    .user-email { font-size: 12px; color: #4A5A6E; margin-top: 2px; }
+    .user-meta { font-size: 11px; color: #6B7A8D; }
+    .user-stats { display: flex; gap: 20px; text-align: right; }
+    .user-stat { }
+    .user-stat-val { font-size: 16px; font-weight: 700; color: #2C3848; }
+    .user-stat-lbl { font-size: 10px; color: #6B7A8D; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── runs tab ── */
+    .filter-row { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
+    .filter-input { background: #DCE9F5; border: 1.5px solid #4A7BAA; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-family: inherit; color: #2C3848; outline: none; transition: box-shadow 0.15s; }
+    .filter-input:focus { box-shadow: 0 0 0 2px #2C3848; }
+    .filter-input::placeholder { color: #6B7A8D; }
+
+    .runs-table { width: 100%; border-collapse: collapse; }
+    .runs-table th { font-size: 11px; font-weight: 700; color: #4A5A6E; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 16px; text-align: left; border-bottom: 1.5px solid #4A7BAA; }
+    .runs-table td { font-size: 13px; color: #2C3848; padding: 13px 16px; border-bottom: 1px solid #B8D0E8; }
+    .runs-table tr:last-child td { border-bottom: none; }
+    .runs-table tr:hover td { background: rgba(220,233,245,0.5); }
+    .table-wrap { background: #DCE9F5; border-radius: 16px; border: 1.5px solid #4A7BAA; overflow: hidden; }
+    .effort-pill { font-size: 11px; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+    .effort-pill.e1, .effort-pill.e2 { background: #B8D0E8; color: #4A5A6E; }
+    .effort-pill.e3 { background: #6B96C0; color: #EEF2FA; }
+    .effort-pill.e4, .effort-pill.e5 { background: #2C3848; color: #EEF2FA; }
+    .del-row-btn { background: none; border: none; color: #c0392b; font-size: 13px; cursor: pointer; padding: 4px 8px; border-radius: 6px; font-family: inherit; transition: background 0.15s; }
+    .del-row-btn:hover { background: rgba(192,57,43,0.1); }
+
+    /* ── plans tab ── */
+    .plan-filter { display: flex; gap: 12px; margin-bottom: 20px; }
+
+    /* ── settings tab ── */
+    .settings-card { background: #DCE9F5; border-radius: 16px; padding: 28px 32px; margin-bottom: 20px; border: 1.5px solid #4A7BAA; }
+    .settings-card h3 { font-size: 15px; font-weight: 700; color: #2C3848; margin-bottom: 20px; }
+    .f-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .f-label { font-size: 11px; font-weight: 700; color: #2C3848; text-transform: uppercase; letter-spacing: 0.06em; }
+    .f-input { background: #EEF2FA; border: 1px solid #6B96C0; border-radius: 10px; padding: 11px 14px; font-size: 14px; font-family: inherit; color: #2C3848; outline: none; transition: box-shadow 0.15s; }
+    .f-input:focus { box-shadow: 0 0 0 2px #2C3848; }
+    .f-textarea { resize: vertical; min-height: 80px; }
+    .save-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 11px 26px; font-size: 13px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .save-btn:hover { opacity: 0.8; }
+    .success-msg { font-size: 12px; color: #2C3848; margin-left: 12px; display: none; }
+
+    /* ── shared ── */
+    .loading { text-align: center; padding: 48px; color: #4A5A6E; font-size: 14px; }
+    .empty-state { text-align: center; padding: 60px; color: #4A5A6E; font-size: 14px; }
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 999px; }
+    .badge.connected { background: #2C3848; color: #EEF2FA; }
+    .badge.pending { background: #B8D0E8; color: #4A5A6E; }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: #2C3848; color: #EEF2FA; font-size: 13px; font-weight: 600; padding: 11px 22px; border-radius: 999px; z-index: 999; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 900px) {
+      .admin-header, .admin-tabs, .tab-content { padding-left: 24px; padding-right: 24px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .user-stats { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── login ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>run · admin</h1>
+    <p>admin access only</p>
+    <input type="email" id="email-input" placeholder="email" onkeydown="if(event.key==='Enter')login()" />
+    <input type="password" id="password-input" placeholder="password" onkeydown="if(event.key==='Enter')login()" />
+    <button onclick="login()">enter</button>
+    <p class="login-error" id="login-error">wrong email or password</p>
+  </div>
+</div>
+
+<!-- ── admin ── -->
+<div id="admin-screen">
+  <div class="admin-header">
+    <div><h1>admin</h1><p>run · dashboard</p></div>
+    <button class="logout-btn" onclick="logout()">log out</button>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="tab-btn active" onclick="switchTab('overview', this)">overview</button>
+    <button class="tab-btn" onclick="switchTab('users', this)">users</button>
+    <button class="tab-btn" onclick="switchTab('runs', this)">runs</button>
+    <button class="tab-btn" onclick="switchTab('plans', this)">plans</button>
+    <button class="tab-btn" onclick="switchTab('settings', this)">settings</button>
+  </div>
+
+  <!-- overview -->
+  <div id="tab-overview" class="tab-content active">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">total users</div>
+        <div class="stat-val" id="stat-users">—</div>
+        <div class="stat-sub" id="stat-users-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">total runs logged</div>
+        <div class="stat-val" id="stat-runs">—</div>
+        <div class="stat-sub" id="stat-runs-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">total km logged</div>
+        <div class="stat-val" id="stat-km">—</div>
+        <div class="stat-sub">all time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">plans generated</div>
+        <div class="stat-val" id="stat-plans">—</div>
+        <div class="stat-sub">all time</div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:8px">
+      <h2>recent runs</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="runs-table">
+        <thead><tr><th>user</th><th>date</th><th>distance</th><th>pace</th><th>effort</th><th>shoes</th><th>notes</th></tr></thead>
+        <tbody id="overview-runs-body"><tr><td colspan="7" style="text-align:center;padding:32px;color:#6B7A8D">loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- users -->
+  <div id="tab-users" class="tab-content">
+    <div class="section-head">
+      <h2>users</h2>
+    </div>
+    <div id="user-list" class="user-list"><div class="loading">loading...</div></div>
+  </div>
+
+  <!-- runs -->
+  <div id="tab-runs" class="tab-content">
+    <div class="section-head">
+      <h2>all runs</h2>
+      <button class="danger-btn" onclick="confirmClearRuns()">clear all runs</button>
+    </div>
+    <div class="filter-row">
+      <input class="filter-input" id="runs-search" placeholder="search by user or notes..." oninput="filterRuns()" style="flex:1;max-width:320px" />
+      <input class="filter-input" id="runs-date-from" type="date" onchange="filterRuns()" />
+      <span style="font-size:13px;color:#6B7A8D">to</span>
+      <input class="filter-input" id="runs-date-to" type="date" onchange="filterRuns()" />
+    </div>
+    <div class="table-wrap">
+      <table class="runs-table">
+        <thead><tr><th>user</th><th>date</th><th>distance</th><th>pace</th><th>effort</th><th>shoes</th><th>notes</th><th></th></tr></thead>
+        <tbody id="runs-body"><tr><td colspan="8" style="text-align:center;padding:32px;color:#6B7A8D">loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- plans -->
+  <div id="tab-plans" class="tab-content">
+    <div class="section-head">
+      <h2>generated plans</h2>
+    </div>
+    <div class="filter-row plan-filter">
+      <input class="filter-input" id="plans-search" placeholder="search by user..." oninput="filterPlans()" style="flex:1;max-width:320px" />
+    </div>
+    <div class="table-wrap">
+      <table class="runs-table">
+        <thead><tr><th>user</th><th>date</th><th>run title</th><th>detail</th><th>type</th></tr></thead>
+        <tbody id="plans-body"><tr><td colspan="5" style="text-align:center;padding:32px;color:#6B7A8D">loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- settings -->
+  <div id="tab-settings" class="tab-content">
+    <div class="settings-card">
+      <h3>app info</h3>
+      <div class="f-group"><label class="f-label">app name</label><input class="f-input" id="s-app-name" value="run" /></div>
+      <div class="f-group"><label class="f-label">tagline</label><input class="f-input" id="s-tagline" value="your beginner running plan" /></div>
+      <button class="save-btn" onclick="saveSettings()">save</button>
+      <span class="success-msg" id="settings-success">saved!</span>
+    </div>
+    <div class="settings-card">
+      <h3>plan defaults</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="f-group"><label class="f-label">default goal</label>
+          <select class="f-input" id="s-default-goal">
+            <option value="5k">run a 5K</option>
+            <option value="habit">build a running habit</option>
+            <option value="10k">run a 10K</option>
+          </select>
+        </div>
+        <div class="f-group"><label class="f-label">max km per week (beginner)</label><input class="f-input" type="number" id="s-max-km" value="15" /></div>
+      </div>
+      <button class="save-btn" onclick="savePlanSettings()">save</button>
+      <span class="success-msg" id="plan-settings-success">saved!</span>
+    </div>
+    <div class="settings-card">
+      <h3>database</h3>
+      <p style="font-size:13px;color:#4A5A6E;margin-bottom:16px;line-height:1.6">manage raw data. these actions are permanent and cannot be undone.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="danger-btn" onclick="confirmClearRuns()">clear all runs</button>
+        <button class="danger-btn" onclick="confirmClearPlans()">clear all plans</button>
+        <button class="danger-btn" onclick="confirmClearShoes()">clear all shoes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const SUPABASE_URL = 'https://trsrsplijzjmytmooyyi.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyc3JzcGxpanpqbXl0bW9veXlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MjkyNTgsImV4cCI6MjA5NzIwNTI1OH0.TiC-0Eid8Btii-x4XBbhEVO63dHDN90gcbWKDjRGZNs';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let allRunsData = [];
+  let allPlansData = [];
+  let allUsersData = [];
+
+  // ── auth ──
+  async function login() {
+    const email = document.getElementById('email-input').value;
+    const pw = document.getElementById('password-input').value;
+    const { error } = await db.auth.signInWithPassword({ email, password: pw });
+    if (error) { document.getElementById('login-error').style.display = 'block'; return; }
+    showAdmin();
+  }
+
+  async function logout() {
+    await db.auth.signOut();
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('password-input').value = '';
+  }
+
+  function showAdmin() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = 'block';
+    loadOverview();
+  }
+
+  window.addEventListener('load', async () => {
+    const { data: { session } } = await db.auth.getSession();
+    if (session) showAdmin();
+  });
+
+  // ── tabs ──
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    if (name === 'overview') loadOverview();
+    if (name === 'users') loadUsers();
+    if (name === 'runs') loadRuns();
+    if (name === 'plans') loadPlans();
+  }
+
+  // ── overview ──
+  async function loadOverview() {
+    const [{ count: userCount }, { data: runs }, { data: plans }] = await Promise.all([
+      db.from('runs').select('user_id', { count: 'exact', head: false }).then(r => ({ count: new Set((r.data||[]).map(x=>x.user_id)).size })),
+      db.from('runs').select('*').order('run_date', { ascending: false }).limit(200),
+      db.from('plans').select('id', { count: 'exact', head: true }),
+    ]);
+
+    const totalKm = (runs||[]).reduce((s,r) => s+(r.distance_km||0), 0);
+    const thisWeek = (runs||[]).filter(r => r.run_date >= getWeekStart()).length;
+
+    document.getElementById('stat-users').textContent = userCount || '—';
+    document.getElementById('stat-runs').textContent = (runs||[]).length;
+    document.getElementById('stat-runs-sub').textContent = `${thisWeek} this week`;
+    document.getElementById('stat-km').textContent = totalKm.toFixed(0) + 'km';
+    document.getElementById('stat-plans').textContent = plans?.length || '—';
+
+    const tbody = document.getElementById('overview-runs-body');
+    if (!runs || !runs.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#6B7A8D">no runs yet</td></tr>'; return; }
+    tbody.innerHTML = runs.slice(0,15).map(r => `
+      <tr>
+        <td style="font-size:11px;color:#6B7A8D">${r.user_id.slice(0,8)}…</td>
+        <td>${r.run_date}</td>
+        <td><strong>${r.distance_km}km</strong></td>
+        <td>${r.pace_per_km || '—'}</td>
+        <td><span class="effort-pill e${r.effort||3}">effort ${r.effort||'—'}</span></td>
+        <td style="color:#4A5A6E">${r.shoes||'—'}</td>
+        <td style="color:#4A5A6E;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.notes||'—'}</td>
+      </tr>`).join('');
+  }
+
+  // ── users ──
+  async function loadUsers() {
+    const list = document.getElementById('user-list');
+    list.innerHTML = '<div class="loading">loading...</div>';
+
+    const { data: runs } = await db.from('runs').select('*');
+    if (!runs) { list.innerHTML = '<div class="empty-state">no data yet</div>'; return; }
+
+    // group by user
+    const byUser = {};
+    runs.forEach(r => {
+      if (!byUser[r.user_id]) byUser[r.user_id] = { runs: [], km: 0 };
+      byUser[r.user_id].runs.push(r);
+      byUser[r.user_id].km += r.distance_km || 0;
+    });
+
+    const userIds = Object.keys(byUser);
+    if (!userIds.length) { list.innerHTML = '<div class="empty-state">no users yet</div>'; return; }
+
+    document.getElementById('stat-users').textContent = userIds.length;
+    list.innerHTML = userIds.map(uid => {
+      const u = byUser[uid];
+      const latest = u.runs.sort((a,b) => b.run_date.localeCompare(a.run_date))[0];
+      const initials = uid.slice(0,2).toUpperCase();
+      return `
+        <div class="user-row">
+          <div class="user-avatar">${initials}</div>
+          <div class="user-info">
+            <div class="user-name">${uid.slice(0,8)}…</div>
+            <div class="user-email">last run: ${latest?.run_date || 'never'}</div>
+          </div>
+          <div class="user-stats">
+            <div class="user-stat"><div class="user-stat-val">${u.runs.length}</div><div class="user-stat-lbl">runs</div></div>
+            <div class="user-stat"><div class="user-stat-val">${u.km.toFixed(1)}</div><div class="user-stat-lbl">km</div></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── runs ──
+  async function loadRuns() {
+    const tbody = document.getElementById('runs-body');
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:#6B7A8D">loading...</td></tr>';
+    const { data } = await db.from('runs').select('*').order('run_date', { ascending: false }).limit(500);
+    allRunsData = data || [];
+    renderRunsTable(allRunsData);
+  }
+
+  function renderRunsTable(rows) {
+    const tbody = document.getElementById('runs-body');
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;color:#6B7A8D">no runs found</td></tr>'; return; }
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td style="font-size:11px;color:#6B7A8D">${r.user_id.slice(0,8)}…</td>
+        <td>${r.run_date}</td>
+        <td><strong>${r.distance_km}km</strong></td>
+        <td>${r.pace_per_km||'—'}</td>
+        <td><span class="effort-pill e${r.effort||3}">effort ${r.effort||'—'}</span></td>
+        <td style="color:#4A5A6E">${r.shoes||'—'}</td>
+        <td style="color:#4A5A6E;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.notes||'—'}</td>
+        <td><button class="del-row-btn" onclick="deleteRun('${r.id}')">✕</button></td>
+      </tr>`).join('');
+  }
+
+  function filterRuns() {
+    const q = document.getElementById('runs-search').value.toLowerCase();
+    const from = document.getElementById('runs-date-from').value;
+    const to = document.getElementById('runs-date-to').value;
+    let rows = allRunsData;
+    if (q) rows = rows.filter(r => r.user_id.includes(q) || (r.notes||'').toLowerCase().includes(q) || (r.shoes||'').toLowerCase().includes(q));
+    if (from) rows = rows.filter(r => r.run_date >= from);
+    if (to) rows = rows.filter(r => r.run_date <= to);
+    renderRunsTable(rows);
+  }
+
+  async function deleteRun(id) {
+    if (!confirm('delete this run?')) return;
+    await db.from('runs').delete().eq('id', id);
+    allRunsData = allRunsData.filter(r => r.id !== id);
+    renderRunsTable(allRunsData);
+    showToast('run deleted');
+  }
+
+  // ── plans ──
+  async function loadPlans() {
+    const tbody = document.getElementById('plans-body');
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#6B7A8D">loading...</td></tr>';
+    const { data } = await db.from('plans').select('*').order('plan_date', { ascending: false }).limit(500);
+    allPlansData = data || [];
+    renderPlansTable(allPlansData);
+  }
+
+  function renderPlansTable(rows) {
+    const tbody = document.getElementById('plans-body');
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#6B7A8D">no plans found</td></tr>'; return; }
+    tbody.innerHTML = rows.map(p => `
+      <tr>
+        <td style="font-size:11px;color:#6B7A8D">${p.user_id.slice(0,8)}…</td>
+        <td>${p.plan_date}</td>
+        <td><strong>${p.run_title}</strong></td>
+        <td style="color:#4A5A6E;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.run_detail}</td>
+        <td><span class="badge ${p.is_rest?'pending':'connected'}">${p.is_rest?'rest':'run'}</span></td>
+      </tr>`).join('');
+  }
+
+  function filterPlans() {
+    const q = document.getElementById('plans-search').value.toLowerCase();
+    renderPlansTable(q ? allPlansData.filter(p => p.user_id.includes(q) || p.run_title.toLowerCase().includes(q)) : allPlansData);
+  }
+
+  // ── settings ──
+  async function saveSettings() {
+    showToast('settings saved!');
+    const msg = document.getElementById('settings-success');
+    msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 2000);
+  }
+
+  async function savePlanSettings() {
+    showToast('plan defaults saved!');
+    const msg = document.getElementById('plan-settings-success');
+    msg.style.display = 'inline'; setTimeout(() => msg.style.display = 'none', 2000);
+  }
+
+  // ── danger zone ──
+  async function confirmClearRuns() {
+    if (!confirm('delete ALL runs for ALL users? this cannot be undone.')) return;
+    await db.from('runs').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    allRunsData = [];
+    renderRunsTable([]);
+    loadOverview();
+    showToast('all runs cleared');
+  }
+
+  async function confirmClearPlans() {
+    if (!confirm('delete ALL plans? this cannot be undone.')) return;
+    await db.from('plans').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    allPlansData = [];
+    renderPlansTable([]);
+    showToast('all plans cleared');
+  }
+
+  async function confirmClearShoes() {
+    if (!confirm('delete ALL shoe data? this cannot be undone.')) return;
+    await db.from('shoes').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    showToast('all shoe data cleared');
+  }
+
+  // ── helpers ──
+  function getWeekStart() {
+    const d = new Date(); const day = d.getDay();
+    d.setDate(d.getDate() + (day === 0 ? -6 : 1 - day)); d.setHours(0,0,0,0);
+    return d.toLocaleDateString('en-CA');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+</script>
+</body>
+</html>

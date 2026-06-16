@@ -32,7 +32,21 @@
     .nav-btn { font-size: 13px; color: #2C3848; padding: 7px 16px; border-radius: 999px; border: 1px solid #6B96C0; cursor: pointer; background: none; font-family: inherit; transition: all 0.15s; }
     .nav-btn:hover, .nav-btn.active { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
     .divider { width: 1px; height: 20px; background: #6B96C0; margin: 0 4px; }
-    .user-pill { font-size: 12px; color: #4A5A6E; padding: 7px 14px; border-radius: 999px; border: 1px solid #6B96C0; }
+
+    .user-pill { font-size: 12px; color: #4A5A6E; padding: 7px 14px; border-radius: 999px; border: 1px solid #6B96C0; cursor: pointer; position: relative; user-select: none; transition: all 0.15s; }
+    .user-pill:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
+    .profile-dropdown { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: #EEF2FA; border-radius: 16px; padding: 20px; width: 280px; box-shadow: 0 8px 32px rgba(44,56,72,0.18); border: 1.5px solid #4A7BAA; z-index: 200; }
+    .profile-dropdown.open { display: block; }
+    .profile-dropdown h3 { font-size: 13px; font-weight: 700; color: #2C3848; margin-bottom: 14px; }
+    .profile-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .profile-field label { font-size: 10px; font-weight: 700; color: #4A5A6E; text-transform: uppercase; letter-spacing: 0.06em; }
+    .profile-input { background: #D4E4F5; border: none; border-radius: 10px; padding: 10px 12px; font-size: 13px; font-family: inherit; color: #2C3848; outline: none; transition: box-shadow 0.15s; }
+    .profile-input:focus { box-shadow: 0 0 0 2px #2C3848; }
+    .profile-save { width: 100%; background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 10px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; margin-top: 4px; }
+    .profile-save:hover { opacity: 0.8; }
+    .profile-divider { height: 1px; background: #B8D0E8; margin: 14px 0; }
+    .profile-danger { width: 100%; background: none; border: 1px solid #c0392b; color: #c0392b; border-radius: 999px; padding: 9px; font-size: 12px; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .profile-danger:hover { background: #c0392b; color: white; }
 
     /* ── views ── */
     .view { display: none; padding: 48px 48px; }
@@ -253,8 +267,26 @@
       <button class="nav-btn" onclick="switchView('stretches',this)">stretches</button>
       <button class="nav-btn" onclick="switchView('sources',this)">sources</button>
       <div class="divider"></div>
-      <span class="user-pill" id="user-pill">—</span>
-      <button class="nav-btn" onclick="logout()">log out</button>
+      <div class="user-pill" id="user-pill" onclick="toggleProfileDropdown(event)">—
+        <div class="profile-dropdown" id="profile-dropdown" onclick="event.stopPropagation()">
+          <h3>profile</h3>
+          <div class="profile-field">
+            <label>display name</label>
+            <input class="profile-input" id="profile-name" placeholder="your name" />
+          </div>
+          <div class="profile-field">
+            <label>email</label>
+            <input class="profile-input" id="profile-email" placeholder="email" type="email" />
+          </div>
+          <div class="profile-field">
+            <label>new password</label>
+            <input class="profile-input" id="profile-password" placeholder="leave blank to keep current" type="password" />
+          </div>
+          <button class="profile-save" onclick="saveProfile()">save changes</button>
+          <div class="profile-divider"></div>
+          <button class="profile-danger" onclick="logout()">log out</button>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -374,29 +406,10 @@
     <h2 class="section-label">sources</h2>
     <div class="sources-grid">
       <div class="source-card">
-        <div class="source-top"><div class="source-name">Apple Health</div><div class="source-dot on"></div></div>
-        <div class="source-desc">distance, heart rate, sleep, resting HR, step count. powers recovery score.</div>
-        <button class="source-btn on">connected ✓</button>
-      </div>
-      <div class="source-card">
-        <div class="source-top"><div class="source-name">Garmin Connect</div><div class="source-dot off"></div></div>
-        <div class="source-desc">GPS distance, pace, cadence, heart rate zones, VO2 max estimate.</div>
-        <button class="source-btn" onclick="showToast('Garmin integration coming soon!')">connect →</button>
-      </div>
-      <div class="source-card">
-        <div class="source-top"><div class="source-name">Strava</div><div class="source-dot off"></div></div>
-        <div class="source-desc">activity sync, segment data, social running features.</div>
-        <button class="source-btn" onclick="showToast('Strava integration coming soon!')">connect →</button>
-      </div>
-      <div class="source-card">
-        <div class="source-top"><div class="source-name">Fitbit</div><div class="source-dot off"></div></div>
-        <div class="source-desc">heart rate, sleep stages, active minutes, daily steps.</div>
-        <button class="source-btn" onclick="showToast('Fitbit integration coming soon!')">connect →</button>
-      </div>
-      <div class="source-card">
-        <div class="source-top"><div class="source-name">Whoop</div><div class="source-dot off"></div></div>
-        <div class="source-desc">strain score, recovery score, sleep performance.</div>
-        <button class="source-btn" onclick="showToast('Whoop integration coming soon!')">connect →</button>
+        <div class="source-top"><div class="source-name">Strava</div><div class="source-dot" id="strava-dot"></div></div>
+        <div class="source-desc">connects your Garmin, Apple Watch, or any device that syncs to Strava. pulls all your runs automatically.</div>
+        <div id="strava-status-text" style="font-size:12px;color:#4A5A6E;min-height:16px"></div>
+        <button class="source-btn" id="strava-btn" onclick="stravaConnect()">connect →</button>
       </div>
       <div class="source-card">
         <div class="source-top"><div class="source-name">manual entry</div><div class="source-dot on"></div></div>
@@ -461,8 +474,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  const SUPABASE_URL = 'https://trsrsplijzjmytmooyyi.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyc3JzcGxpanpqbXl0bW9veXlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MjkyNTgsImV4cCI6MjA5NzIwNTI1OH0.TiC-0Eid8Btii-x4XBbhEVO63dHDN90gcbWKDjRGZNs';
+  const STRAVA_CLIENT_ID = '258624';
+  const STRAVA_REDIRECT = 'https://vanessaching.github.io/personalized-running/run.html';
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -470,6 +485,154 @@
   let authMode = 'login';
   let activeDays = [];
   let todayPlan = null;
+
+
+  // ── strava ──
+  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&approval_prompt=force&scope=activity:read_all`;
+
+  function stravaConnect() {
+    window.location.href = STRAVA_AUTH_URL;
+  }
+
+  async function handleStravaCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (!code) return;
+
+    // clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    showToast('connecting Strava...');
+
+    // exchange code for token via Strava
+    const res = await fetch('https://www.strava.com/oauth/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        client_id: STRAVA_CLIENT_ID,
+        client_secret: '2df7cd89da4d800b4c5b05ff0d7e97c091b201ea',
+        code,
+        grant_type: 'authorization_code'
+      })
+    });
+
+    const token = await res.json();
+    if (!token.access_token) { showToast('strava connection failed'); return; }
+
+    // save token to supabase for this user
+    await db.from('strava_tokens').upsert({
+      user_id: currentUser.id,
+      access_token: token.access_token,
+      refresh_token: token.refresh_token,
+      expires_at: token.expires_at,
+      athlete_id: token.athlete?.id,
+      athlete_name: token.athlete?.firstname + ' ' + token.athlete?.lastname,
+    }, { onConflict: 'user_id' });
+
+    updateStravaUI(true, token.athlete?.firstname);
+    await importStravaRuns(token.access_token);
+  }
+
+  function updateStravaUI(connected, name) {
+    const dot = document.getElementById('strava-dot');
+    const btn = document.getElementById('strava-btn');
+    const txt = document.getElementById('strava-status-text');
+    if (!dot) return;
+    if (connected) {
+      dot.classList.add('on'); dot.classList.remove('off');
+      btn.textContent = 'disconnect'; btn.classList.add('on');
+      btn.onclick = stravaDisconnect;
+      txt.textContent = name ? `connected as ${name}` : 'connected';
+    } else {
+      dot.classList.remove('on'); dot.classList.add('off');
+      btn.textContent = 'connect →'; btn.classList.remove('on');
+      btn.onclick = stravaConnect;
+      txt.textContent = '';
+    }
+  }
+
+  async function checkStravaConnection() {
+    if (!currentUser) return;
+    const { data } = await db.from('strava_tokens').select('*').eq('user_id', currentUser.id).maybeSingle();
+    if (data) updateStravaUI(true, data.athlete_name?.split(' ')[0]);
+    else updateStravaUI(false);
+  }
+
+  async function stravaDisconnect() {
+    if (!confirm('disconnect Strava?')) return;
+    await db.from('strava_tokens').delete().eq('user_id', currentUser.id);
+    updateStravaUI(false);
+    showToast('Strava disconnected');
+  }
+
+  async function importStravaRuns(accessToken) {
+    showToast('importing runs from Strava...');
+    const res = await fetch('https://www.strava.com/api/v3/athlete/activities?per_page=100', {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    });
+    const activities = await res.json();
+    const runs = activities.filter(a => a.type === 'Run');
+
+    let imported = 0;
+    for (const r of runs) {
+      const date = r.start_date_local.split('T')[0];
+      const distKm = (r.distance / 1000).toFixed(2);
+      const paceSecPerKm = r.moving_time / (r.distance / 1000);
+      const paceMin = Math.floor(paceSecPerKm / 60);
+      const paceSec = Math.round(paceSecPerKm % 60);
+      const pace = `${paceMin}:${paceSec.toString().padStart(2,'0')}`;
+
+      const { error } = await db.from('runs').upsert({
+        user_id: currentUser.id,
+        run_date: date,
+        distance_km: parseFloat(distKm),
+        pace_per_km: pace,
+        source: 'strava',
+        strava_id: r.id.toString(),
+        notes: r.name !== 'Morning Run' && r.name !== 'Afternoon Run' && r.name !== 'Evening Run' ? r.name : null,
+      }, { onConflict: 'user_id,strava_id' });
+      if (!error) imported++;
+    }
+
+    showToast(`imported ${imported} runs from Strava!`);
+    loadDashboard();
+    loadProgress();
+  }
+
+  // ── profile dropdown ──
+  function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profile-dropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', () => {
+    document.getElementById('profile-dropdown')?.classList.remove('open');
+  });
+
+  function populateProfile(user) {
+    document.getElementById('profile-name').value = user.user_metadata?.display_name || '';
+    document.getElementById('profile-email').value = user.email || '';
+  }
+
+  async function saveProfile() {
+    const name = document.getElementById('profile-name').value.trim();
+    const email = document.getElementById('profile-email').value.trim();
+    const password = document.getElementById('profile-password').value;
+    const updates = {};
+    if (email && email !== currentUser.email) updates.email = email;
+    if (password) updates.password = password;
+    if (Object.keys(updates).length) {
+      const { error } = await db.auth.updateUser(updates);
+      if (error) { showToast('error: ' + error.message); return; }
+    }
+    if (name) {
+      const { error } = await db.auth.updateUser({ data: { display_name: name } });
+      if (error) { showToast('error: ' + error.message); return; }
+      document.getElementById('user-pill').childNodes[0].textContent = name;
+    }
+    document.getElementById('profile-password').value = '';
+    document.getElementById('profile-dropdown').classList.remove('open');
+    showToast('profile updated!');
+  }
 
   // ── auth ──
   function switchAuthTab(mode) {
@@ -514,6 +677,9 @@
     loadStretchGrid('pre');
     loadProgress();
     loadShoes();
+    checkStravaConnection();
+    handleStravaCallback();
+    populateProfile(user);
   }
 
   window.addEventListener('load', async () => {

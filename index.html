@@ -9,7 +9,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; min-height: 100vh; background: #9BB8D4; color: #2C3848; }
 
-    /* ── auth screen ── */
+    /* ── auth ── */
     #auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
     .auth-box { background: #EEF2FA; border-radius: 20px; padding: 48px 40px; width: 380px; max-width: 90vw; box-shadow: 0 4px 32px rgba(44,56,72,0.15); }
     .auth-logo { font-size: 28px; font-weight: 700; letter-spacing: -0.04em; color: #2C3848; margin-bottom: 4px; }
@@ -33,6 +33,14 @@
     .nav-btn:hover, .nav-btn.active { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
     .divider { width: 1px; height: 20px; background: #6B96C0; margin: 0 4px; }
 
+    /* unit toggle */
+    .unit-toggle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4A5A6E; }
+    .unit-switch { position: relative; width: 36px; height: 20px; background: #6B96C0; border-radius: 999px; cursor: pointer; transition: background 0.2s; border: none; }
+    .unit-switch.km { background: #2C3848; }
+    .unit-knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: transform 0.2s; }
+    .unit-switch.km .unit-knob { transform: translateX(16px); }
+
+    /* profile pill */
     .user-pill { font-size: 12px; color: #4A5A6E; padding: 7px 14px; border-radius: 999px; border: 1px solid #6B96C0; cursor: pointer; position: relative; user-select: none; transition: all 0.15s; }
     .user-pill:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
     .profile-dropdown { display: none; position: absolute; top: calc(100% + 8px); right: 0; background: #EEF2FA; border-radius: 16px; padding: 20px; width: 280px; box-shadow: 0 8px 32px rgba(44,56,72,0.18); border: 1.5px solid #4A7BAA; z-index: 200; }
@@ -49,7 +57,7 @@
     .profile-danger:hover { background: #c0392b; color: white; }
 
     /* ── views ── */
-    .view { display: none; padding: 48px 48px; }
+    .view { display: none; padding: 48px; }
     .view.active { display: block; }
     .section-label { font-size: 20px; font-weight: 700; color: #2C3848; letter-spacing: -0.02em; margin-bottom: 28px; }
 
@@ -67,7 +75,6 @@
     .week-card { background: #DCE9F5; border-radius: 16px; padding: 28px; border: 1.5px solid #4A7BAA; }
     .week-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
     .week-card-label { font-size: 13px; font-weight: 700; color: #2C3848; }
-    .week-total { font-size: 12px; color: #4A5A6E; }
     .week-days { display: flex; gap: 10px; }
     .day-col { flex: 1; text-align: center; }
     .day-name { font-size: 10px; color: #4A5A6E; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
@@ -100,9 +107,9 @@
     .run-meta { font-size: 11px; color: #4A5A6E; margin-top: 2px; }
     .run-km { font-size: 15px; font-weight: 700; color: #2C3848; white-space: nowrap; }
     .run-effort { font-size: 10px; padding: 3px 8px; border-radius: 999px; white-space: nowrap; margin-left: 8px; }
-    .run-effort.e1, .run-effort.e2 { background: #B8D0E8; color: #4A5A6E; }
+    .run-effort.e1,.run-effort.e2 { background: #B8D0E8; color: #4A5A6E; }
     .run-effort.e3 { background: #6B96C0; color: #EEF2FA; }
-    .run-effort.e4, .run-effort.e5 { background: #2C3848; color: #EEF2FA; }
+    .run-effort.e4,.run-effort.e5 { background: #2C3848; color: #EEF2FA; }
 
     /* ── plan ── */
     .plan-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
@@ -111,22 +118,19 @@
     .days-toggle { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .day-toggle-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #6B96C0; background: #B8D0E8; font-size: 12px; font-family: inherit; cursor: pointer; color: #2C3848; transition: all 0.15s; font-weight: 600; }
     .day-toggle-btn.on { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
-    .goal-select { width: 100%; background: #D4E4F5; border: none; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-family: inherit; outline: none; color: #2C3848; transition: box-shadow 0.15s; cursor: pointer; margin-bottom: 14px; }
-    .goal-select:focus { box-shadow: 0 0 0 2px #2C3848; }
+    .goal-select { width: 100%; background: #D4E4F5; border: none; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-family: inherit; outline: none; color: #2C3848; cursor: pointer; margin-bottom: 14px; }
     .progress-wrap { margin-top: 4px; }
     .progress-lbl { display: flex; justify-content: space-between; font-size: 12px; color: #4A5A6E; margin-bottom: 6px; }
     .progress-bar { height: 4px; background: #6B96C0; border-radius: 2px; overflow: hidden; }
     .progress-fill { height: 100%; background: #2C3848; border-radius: 2px; transition: width 0.4s; }
     .gen-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 11px 26px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; }
     .gen-btn:hover { opacity: 0.8; }
-
     .week-runs { display: flex; flex-direction: column; gap: 8px; }
     .plan-row { background: #DCE9F5; border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; border: 1.5px solid #4A7BAA; }
     .plan-row.is-today { border-color: #1A2438; border-width: 2.5px; }
     .plan-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
     .plan-dot.run-day { background: #2C3848; }
-    .plan-dot.rest-day { background: #6B96C0; }
-    .plan-dot.done-day { background: #6B96C0; }
+    .plan-dot.rest-day,.plan-dot.done-day { background: #6B96C0; }
     .plan-info { flex: 1; }
     .plan-title { font-size: 13px; font-weight: 700; color: #2C3848; }
     .plan-detail { font-size: 11px; color: #4A5A6E; margin-top: 2px; }
@@ -137,19 +141,76 @@
     .plan-badge.done { background: #6B96C0; color: #EEF2FA; }
     .plan-badge.rest { background: #B8D0E8; color: #6B7A8D; }
 
+    /* ── analytics / progress ── */
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+    .chart-card { background: #DCE9F5; border-radius: 16px; padding: 26px; border: 1.5px solid #4A7BAA; }
+    .chart-lbl { font-size: 13px; font-weight: 700; color: #2C3848; margin-bottom: 4px; }
+    .chart-sub { font-size: 11px; color: #4A5A6E; margin-bottom: 18px; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 110px; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar { width: 100%; background: #2C3848; border-radius: 3px 3px 0 0; min-height: 4px; }
+    .bar.dim { background: #6B96C0; }
+    .bar-x { font-size: 9px; color: #4A5A6E; text-transform: uppercase; }
+    .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #B8D0E8; }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-row-label { font-size: 13px; color: #4A5A6E; }
+    .stat-row-val { font-size: 14px; font-weight: 700; color: #2C3848; }
+    .shoe-section-lbl { font-size: 15px; font-weight: 700; color: #2C3848; margin-bottom: 14px; }
+    .shoe-card { background: #DCE9F5; border-radius: 14px; padding: 22px 26px; margin-bottom: 10px; border: 1.5px solid #4A7BAA; }
+    .shoe-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .shoe-name { font-size: 14px; font-weight: 700; color: #2C3848; }
+    .shoe-km { font-size: 12px; color: #4A5A6E; }
+    .shoe-bar { height: 5px; background: #6B96C0; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+    .shoe-fill { height: 100%; border-radius: 3px; background: #2C3848; }
+    .shoe-fill.warn { background: #b03030; }
+    .shoe-note { font-size: 11px; color: #4A5A6E; }
+    .add-shoe-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 10px 22px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; margin-top: 4px; }
+    .add-shoe-btn:hover { opacity: 0.8; }
+    .pace-predictor { background: #2C3848; border-radius: 16px; padding: 26px; color: #EEF2FA; }
+    .pace-predictor h3 { font-size: 14px; font-weight: 700; margin-bottom: 16px; color: #EEF2FA; }
+    .prediction-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .prediction-row:last-child { border-bottom: none; }
+    .pred-label { font-size: 13px; color: rgba(238,242,250,0.7); }
+    .pred-val { font-size: 13px; font-weight: 700; color: #EEF2FA; }
+
+    /* ── stretches ── */
+    .stretch-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .stretch-tab { font-size: 13px; color: #2C3848; padding: 7px 18px; border-radius: 999px; border: 1px solid #6B96C0; cursor: pointer; background: none; font-family: inherit; transition: all 0.15s; }
+    .stretch-tab.active { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
+    .stretch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .stretch-card { background: #DCE9F5; border-radius: 14px; padding: 22px; border: 1.5px solid #4A7BAA; transition: border-color 0.2s; }
+    .stretch-card.completed { border-color: #2C3848; background: #C8DCF0; }
+    .stretch-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+    .stretch-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 999px; margin-bottom: 10px; }
+    .stretch-tag.pre { background: #2C3848; color: #EEF2FA; }
+    .stretch-tag.post { background: #6B96C0; color: #EEF2FA; }
+    .stretch-name { font-size: 14px; font-weight: 700; color: #2C3848; margin-bottom: 3px; }
+    .stretch-meta { font-size: 11px; color: #4A5A6E; margin-bottom: 10px; }
+    .stretch-cue { font-size: 12px; color: #4A5A6E; line-height: 1.65; margin-bottom: 14px; }
+    .stretch-check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #6B96C0; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; transition: all 0.15s; }
+    .stretch-check.done { background: #2C3848; border-color: #2C3848; color: #EEF2FA; }
+    .timer-btn { width: 100%; background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 8px; font-size: 12px; font-family: inherit; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
+    .timer-btn:hover { opacity: 0.8; }
+    .timer-btn.running { background: #6B96C0; }
+    .timer-display { font-size: 22px; font-weight: 700; color: #2C3848; text-align: center; margin-bottom: 8px; letter-spacing: 0.02em; }
+    .timer-ring { width: 60px; height: 60px; margin: 0 auto 10px; position: relative; }
+    .timer-ring svg { transform: rotate(-90deg); }
+    .timer-ring circle { fill: none; stroke-width: 4; }
+    .timer-ring .bg { stroke: #B8D0E8; }
+    .timer-ring .fg { stroke: #2C3848; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+
     /* ── sources ── */
-    .sources-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .sources-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
     .source-card { background: #DCE9F5; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; border: 1.5px solid #4A7BAA; }
     .source-top { display: flex; align-items: center; justify-content: space-between; }
     .source-name { font-size: 14px; font-weight: 700; color: #2C3848; }
-    .source-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .source-dot.on { background: #2C3848; }
-    .source-dot.off { background: #6B96C0; opacity: 0.4; }
+    .source-dot { width: 8px; height: 8px; border-radius: 50%; background: #6B96C0; opacity: 0.4; }
+    .source-dot.on { background: #2C3848; opacity: 1; }
     .source-desc { font-size: 12px; color: #4A5A6E; line-height: 1.6; }
+    .source-status { font-size: 12px; color: #4A5A6E; min-height: 16px; }
     .source-btn { align-self: flex-start; font-size: 12px; color: #2C3848; border: 1px solid #6B96C0; border-radius: 999px; padding: 5px 14px; cursor: pointer; background: none; font-family: inherit; transition: all 0.15s; }
     .source-btn:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
     .source-btn.on { background: #2C3848; color: #EEF2FA; border-color: #2C3848; cursor: default; }
-
     .manual-box { background: #DCE9F5; border-radius: 16px; padding: 28px; border: 1.5px solid #4A7BAA; }
     .manual-lbl { font-size: 13px; font-weight: 700; color: #2C3848; margin-bottom: 18px; }
     .manual-grid { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; margin-bottom: 12px; }
@@ -162,39 +223,25 @@
     .log-btn:hover { opacity: 0.8; }
     .manual-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
-    /* ── stretches ── */
-    .stretch-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
-    .stretch-tab { font-size: 13px; color: #2C3848; padding: 7px 18px; border-radius: 999px; border: 1px solid #6B96C0; cursor: pointer; background: none; font-family: inherit; transition: all 0.15s; }
-    .stretch-tab.active { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
-    .stretch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .stretch-card { background: #DCE9F5; border-radius: 14px; padding: 22px; border: 1.5px solid #4A7BAA; }
-    .stretch-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 999px; margin-bottom: 10px; }
-    .stretch-tag.pre { background: #2C3848; color: #EEF2FA; }
-    .stretch-tag.post { background: #6B96C0; color: #EEF2FA; }
-    .stretch-name { font-size: 14px; font-weight: 700; color: #2C3848; margin-bottom: 3px; }
-    .stretch-meta { font-size: 11px; color: #4A5A6E; margin-bottom: 10px; }
-    .stretch-cue { font-size: 12px; color: #4A5A6E; line-height: 1.65; }
-
-    /* ── progress ── */
-    .progress-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
-    .chart-card { background: #DCE9F5; border-radius: 16px; padding: 26px; border: 1.5px solid #4A7BAA; }
-    .chart-lbl { font-size: 13px; font-weight: 700; color: #2C3848; margin-bottom: 20px; }
-    .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 110px; }
-    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-    .bar { width: 100%; background: #2C3848; border-radius: 3px 3px 0 0; min-height: 4px; }
-    .bar.dim { background: #6B96C0; }
-    .bar-x { font-size: 9px; color: #4A5A6E; text-transform: uppercase; letter-spacing: 0.04em; }
-    .shoe-section-lbl { font-size: 15px; font-weight: 700; color: #2C3848; margin-bottom: 14px; }
-    .shoe-card { background: #DCE9F5; border-radius: 14px; padding: 22px 26px; margin-bottom: 10px; border: 1.5px solid #4A7BAA; }
-    .shoe-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-    .shoe-name { font-size: 14px; font-weight: 700; color: #2C3848; }
-    .shoe-km { font-size: 12px; color: #4A5A6E; }
-    .shoe-bar { height: 5px; background: #6B96C0; border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
-    .shoe-fill { height: 100%; border-radius: 3px; background: #2C3848; }
-    .shoe-fill.warn { background: #b03030; }
-    .shoe-note { font-size: 11px; color: #4A5A6E; }
-    .add-shoe-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 10px 22px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; margin-top: 4px; }
-    .add-shoe-btn:hover { opacity: 0.8; }
+    /* ── quiz ── */
+    .quiz-wrap { max-width: 560px; }
+    .quiz-card { background: #DCE9F5; border-radius: 16px; padding: 32px; border: 1.5px solid #4A7BAA; margin-bottom: 20px; }
+    .quiz-q { font-size: 16px; font-weight: 700; color: #2C3848; margin-bottom: 18px; line-height: 1.4; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-opt { background: #EEF2FA; border: 1.5px solid #6B96C0; border-radius: 12px; padding: 13px 18px; font-size: 14px; color: #2C3848; cursor: pointer; font-family: inherit; text-align: left; transition: all 0.15s; }
+    .quiz-opt:hover { border-color: #2C3848; background: #D4E4F5; }
+    .quiz-opt.selected { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
+    .quiz-progress { font-size: 12px; color: #4A5A6E; margin-bottom: 20px; }
+    .quiz-nav { display: flex; gap: 12px; margin-top: 20px; }
+    .quiz-btn { background: #2C3848; color: #EEF2FA; border: none; border-radius: 999px; padding: 11px 28px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; }
+    .quiz-btn:hover { opacity: 0.8; }
+    .quiz-btn.secondary { background: none; border: 1px solid #6B96C0; color: #2C3848; }
+    .quiz-result { background: #2C3848; border-radius: 16px; padding: 32px; color: #EEF2FA; }
+    .quiz-result h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .quiz-result p { font-size: 14px; color: rgba(238,242,250,0.8); line-height: 1.7; margin-bottom: 20px; }
+    .quiz-result-badge { display: inline-block; background: rgba(220,233,245,0.2); color: #DCE9F5; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 999px; margin-bottom: 16px; }
+    .result-apply-btn { background: #B8D0E8; color: #2C3848; border: none; border-radius: 999px; padding: 12px 28px; font-size: 13px; font-family: inherit; font-weight: 700; cursor: pointer; transition: opacity 0.15s; }
+    .result-apply-btn:hover { opacity: 0.85; }
 
     /* ── modal ── */
     .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(44,56,72,0.4); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -214,24 +261,20 @@
     @media (max-width: 960px) {
       .app-header { padding: 16px 24px; }
       .view { padding: 36px 24px; }
-      .metrics-row { grid-template-columns: repeat(2, 1fr); }
-      .dash-grid { grid-template-columns: 1fr; }
-      .plan-top { grid-template-columns: 1fr; }
-      .sources-grid { grid-template-columns: repeat(2, 1fr); }
-      .stretch-grid { grid-template-columns: repeat(2, 1fr); }
-      .progress-charts { grid-template-columns: 1fr; }
+      .metrics-row,.analytics-grid { grid-template-columns: repeat(2,1fr); }
+      .dash-grid,.plan-top { grid-template-columns: 1fr; }
+      .stretch-grid { grid-template-columns: repeat(2,1fr); }
       .manual-grid { grid-template-columns: 1fr 1fr; }
+      .sources-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 600px) {
       .app-header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
       .header-nav { flex-wrap: wrap; gap: 6px; }
       .nav-btn { font-size: 12px; padding: 6px 12px; }
       .view { padding: 28px 16px; }
-      .metrics-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .sources-grid { grid-template-columns: 1fr; }
-      .stretch-grid { grid-template-columns: 1fr; }
-      .manual-grid { grid-template-columns: 1fr; }
-      .manual-row2 { grid-template-columns: 1fr; }
+      .metrics-row { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .stretch-grid,.analytics-grid { grid-template-columns: 1fr; }
+      .manual-grid,.manual-row2 { grid-template-columns: 1fr; }
       .week-days { gap: 4px; }
       .day-bubble { width: 34px; height: 34px; font-size: 10px; }
     }
@@ -239,7 +282,6 @@
 </head>
 <body>
 
-<!-- ── auth screen ── -->
 <div id="auth-screen">
   <div class="auth-box">
     <div class="auth-logo">run</div>
@@ -256,7 +298,6 @@
   </div>
 </div>
 
-<!-- ── app screen ── -->
 <div id="app-screen">
   <header class="app-header">
     <div class="app-logo">run</div>
@@ -265,23 +306,21 @@
       <button class="nav-btn" onclick="switchView('plan',this)">plan</button>
       <button class="nav-btn" onclick="switchView('progress',this)">progress</button>
       <button class="nav-btn" onclick="switchView('stretches',this)">stretches</button>
+      <button class="nav-btn" onclick="switchView('quiz',this)">fitness quiz</button>
       <button class="nav-btn" onclick="switchView('sources',this)">sources</button>
+      <div class="divider"></div>
+      <div class="unit-toggle">
+        <span id="unit-label-mi">mi</span>
+        <button class="unit-switch km" id="unit-switch" onclick="toggleUnit()"><div class="unit-knob"></div></button>
+        <span id="unit-label-km">km</span>
+      </div>
       <div class="divider"></div>
       <div class="user-pill" id="user-pill" onclick="toggleProfileDropdown(event)">—
         <div class="profile-dropdown" id="profile-dropdown" onclick="event.stopPropagation()">
           <h3>profile</h3>
-          <div class="profile-field">
-            <label>display name</label>
-            <input class="profile-input" id="profile-name" placeholder="your name" />
-          </div>
-          <div class="profile-field">
-            <label>email</label>
-            <input class="profile-input" id="profile-email" placeholder="email" type="email" />
-          </div>
-          <div class="profile-field">
-            <label>new password</label>
-            <input class="profile-input" id="profile-password" placeholder="leave blank to keep current" type="password" />
-          </div>
+          <div class="profile-field"><label>display name</label><input class="profile-input" id="profile-name" placeholder="your name" /></div>
+          <div class="profile-field"><label>email</label><input class="profile-input" id="profile-email" type="email" /></div>
+          <div class="profile-field"><label>new password</label><input class="profile-input" id="profile-password" type="password" placeholder="leave blank to keep current" /></div>
           <button class="profile-save" onclick="saveProfile()">save changes</button>
           <div class="profile-divider"></div>
           <button class="profile-danger" onclick="logout()">log out</button>
@@ -294,46 +333,26 @@
   <div id="view-dashboard" class="view active">
     <h2 class="section-label">dashboard</h2>
     <div class="metrics-row">
-      <div class="metric-card">
-        <div class="metric-label">this week</div>
-        <div class="metric-val" id="m-weekly-km">—<span class="metric-unit">km</span></div>
-        <div class="metric-delta" id="m-weekly-delta"></div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">avg pace</div>
-        <div class="metric-val" id="m-pace">—<span class="metric-unit">/km</span></div>
-        <div class="metric-delta" id="m-pace-delta"></div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">streak</div>
-        <div class="metric-val" id="m-streak">—<span class="metric-unit">wks</span></div>
-        <div class="metric-delta" id="m-streak-note"></div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">total runs</div>
-        <div class="metric-val" id="m-total">—</div>
-        <div class="metric-delta muted" id="m-total-note"></div>
-      </div>
+      <div class="metric-card"><div class="metric-label">this week</div><div class="metric-val" id="m-weekly-km">—<span class="metric-unit" id="m-unit">km</span></div><div class="metric-delta" id="m-weekly-delta"></div></div>
+      <div class="metric-card"><div class="metric-label">avg pace</div><div class="metric-val" id="m-pace">—<span class="metric-unit" id="m-pace-unit">/km</span></div><div class="metric-delta" id="m-pace-delta"></div></div>
+      <div class="metric-card"><div class="metric-label">streak</div><div class="metric-val" id="m-streak">—<span class="metric-unit">wks</span></div><div class="metric-delta" id="m-streak-note"></div></div>
+      <div class="metric-card"><div class="metric-label">total runs</div><div class="metric-val" id="m-total">—</div><div class="metric-delta muted" id="m-total-note"></div></div>
     </div>
     <div class="dash-grid">
       <div class="week-card">
-        <div class="week-card-header">
-          <div class="week-card-label">this week</div>
-        </div>
+        <div class="week-card-header"><div class="week-card-label">this week</div></div>
         <div class="week-days" id="week-days-strip"></div>
       </div>
       <div class="today-card">
         <div class="today-eyebrow" id="today-eyebrow">today</div>
-        <div class="recovery-badge good" id="recovery-badge">● ready to run</div>
+        <div class="recovery-badge good">● ready to run</div>
         <div class="today-title" id="today-title">—</div>
         <div class="today-detail" id="today-detail">—</div>
-        <button class="today-btn" id="today-btn" onclick="openLogModal()">log this run →</button>
+        <button class="today-btn" onclick="openLogModal()">log this run →</button>
       </div>
     </div>
     <div class="recent-label">recent runs</div>
-    <div class="run-list" id="recent-runs-list">
-      <div class="empty">no runs yet — log your first one!</div>
-    </div>
+    <div class="run-list" id="recent-runs-list"><div class="empty">no runs yet — log your first one!</div></div>
   </div>
 
   <!-- plan -->
@@ -342,7 +361,7 @@
     <div class="plan-top">
       <div class="plan-card">
         <div class="plan-card-label">available days this week</div>
-        <div class="days-toggle" id="days-toggle">
+        <div class="days-toggle">
           <button class="day-toggle-btn" data-day="Mon" onclick="toggleDay(this)">M</button>
           <button class="day-toggle-btn" data-day="Tue" onclick="toggleDay(this)">T</button>
           <button class="day-toggle-btn" data-day="Wed" onclick="toggleDay(this)">W</button>
@@ -368,22 +387,22 @@
         </div>
       </div>
     </div>
-    <div class="week-runs" id="week-runs-list">
-      <div class="empty">select your available days and hit generate →</div>
-    </div>
+    <div class="week-runs" id="week-runs-list"><div class="empty">select your available days and hit generate →</div></div>
   </div>
 
   <!-- progress -->
   <div id="view-progress" class="view">
     <h2 class="section-label">progress</h2>
-    <div class="progress-charts">
+    <div class="analytics-grid">
+      <div class="chart-card"><div class="chart-lbl">weekly distance</div><div class="chart-sub" id="km-chart-sub"></div><div class="bar-chart" id="km-chart"></div></div>
+      <div class="chart-card"><div class="chart-lbl">avg pace</div><div class="chart-sub" id="pace-chart-sub"></div><div class="bar-chart" id="pace-chart"></div></div>
       <div class="chart-card">
-        <div class="chart-lbl">weekly km</div>
-        <div class="bar-chart" id="km-chart"></div>
+        <div class="chart-lbl">all-time stats</div><div class="chart-sub">lifetime totals</div>
+        <div id="alltime-stats"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-lbl">avg pace (min/km)</div>
-        <div class="bar-chart" id="pace-chart"></div>
+      <div class="pace-predictor">
+        <h3>🏁 race time predictor</h3>
+        <div id="pace-predictions"><div style="font-size:13px;color:rgba(238,242,250,0.6)">log some runs to see your predicted race times</div></div>
       </div>
     </div>
     <div class="shoe-section-lbl">shoe tracker</div>
@@ -398,7 +417,16 @@
       <button class="stretch-tab active" onclick="switchStretchTab('pre',this)">pre-run</button>
       <button class="stretch-tab" onclick="switchStretchTab('post',this)">post-run</button>
     </div>
+    <div id="stretch-progress" style="font-size:12px;color:#4A5A6E;margin-bottom:16px"></div>
     <div class="stretch-grid" id="stretch-grid"></div>
+  </div>
+
+  <!-- quiz -->
+  <div id="view-quiz" class="view">
+    <h2 class="section-label">fitness quiz</h2>
+    <div class="quiz-wrap">
+      <div id="quiz-container"></div>
+    </div>
   </div>
 
   <!-- sources -->
@@ -408,26 +436,27 @@
       <div class="source-card">
         <div class="source-top"><div class="source-name">Strava</div><div class="source-dot" id="strava-dot"></div></div>
         <div class="source-desc">connects your Garmin, Apple Watch, or any device that syncs to Strava. pulls all your runs automatically.</div>
-        <div id="strava-status-text" style="font-size:12px;color:#4A5A6E;min-height:16px"></div>
+        <div class="source-status" id="strava-status-text"></div>
         <button class="source-btn" id="strava-btn" onclick="stravaConnect()">connect →</button>
       </div>
       <div class="source-card">
         <div class="source-top"><div class="source-name">manual entry</div><div class="source-dot on"></div></div>
         <div class="source-desc">always available — log distance, pace, effort, and notes below.</div>
-        <button class="source-btn on">always on ✓</button>
+        <div class="source-status">always on</div>
+        <button class="source-btn on">connected ✓</button>
       </div>
     </div>
     <div class="manual-box">
       <div class="manual-lbl">log a run manually</div>
       <div class="manual-grid">
         <div class="f-group"><label class="f-label">date</label><input class="f-input" type="date" id="log-date" /></div>
-        <div class="f-group"><label class="f-label">distance (km)</label><input class="f-input" type="number" step="0.1" placeholder="5.0" id="log-dist" /></div>
-        <div class="f-group"><label class="f-label">pace (min/km)</label><input class="f-input" placeholder="6:30" id="log-pace" /></div>
+        <div class="f-group"><label class="f-label">distance (<span class="unit-lbl">km</span>)</label><input class="f-input" type="number" step="0.1" placeholder="5.0" id="log-dist" /></div>
+        <div class="f-group"><label class="f-label">pace (min/<span class="unit-lbl">km</span>)</label><input class="f-input" placeholder="6:30" id="log-pace" /></div>
         <button class="log-btn" onclick="logRunManual()">log it →</button>
       </div>
       <div class="manual-row2">
         <div class="f-group"><label class="f-label">effort (1–5)</label>
-          <select class="f-input goal-select" id="log-effort" style="margin-bottom:0">
+          <select class="f-input" id="log-effort" style="margin-bottom:0">
             <option value="1">1 — very easy</option><option value="2">2 — easy</option><option value="3" selected>3 — moderate</option><option value="4">4 — hard</option><option value="5">5 — all out</option>
           </select>
         </div>
@@ -444,10 +473,10 @@
     <button class="modal-close" onclick="closeLogModal()">✕</button>
     <div class="modal-title" id="log-modal-title">log today's run</div>
     <div class="modal-form">
-      <div class="f-group"><label class="f-label">distance (km)</label><input class="f-input" type="number" step="0.1" placeholder="5.0" id="modal-dist" /></div>
-      <div class="f-group"><label class="f-label">pace (min/km)</label><input class="f-input" placeholder="6:30" id="modal-pace" /></div>
+      <div class="f-group"><label class="f-label">distance (<span class="unit-lbl">km</span>)</label><input class="f-input" type="number" step="0.1" placeholder="5.0" id="modal-dist" /></div>
+      <div class="f-group"><label class="f-label">pace (min/<span class="unit-lbl">km</span>)</label><input class="f-input" placeholder="6:30" id="modal-pace" /></div>
       <div class="f-group"><label class="f-label">effort (1–5)</label>
-        <select class="f-input goal-select" id="modal-effort" style="margin-bottom:0">
+        <select class="f-input" id="modal-effort" style="margin-bottom:0">
           <option value="1">1 — very easy</option><option value="2">2 — easy</option><option value="3" selected>3 — moderate</option><option value="4">4 — hard</option><option value="5">5 — all out</option>
         </select>
       </div>
@@ -464,8 +493,8 @@
     <div class="modal-title">add shoes</div>
     <div class="modal-form">
       <div class="f-group"><label class="f-label">shoe name</label><input class="f-input" placeholder="Nike Pegasus 41" id="shoe-name-input" /></div>
-      <div class="f-group"><label class="f-label">current mileage (km)</label><input class="f-input" type="number" placeholder="0" id="shoe-miles-input" /></div>
-      <div class="f-group"><label class="f-label">max mileage (km)</label><input class="f-input" type="number" placeholder="800" id="shoe-max-input" /></div>
+      <div class="f-group"><label class="f-label">current mileage (<span class="unit-lbl">km</span>)</label><input class="f-input" type="number" placeholder="0" id="shoe-miles-input" /></div>
+      <div class="f-group"><label class="f-label">max mileage (<span class="unit-lbl">km</span>)</label><input class="f-input" type="number" placeholder="800" id="shoe-max-input" /></div>
       <button class="modal-submit" onclick="saveShoe()">add shoes →</button>
     </div>
   </div>
@@ -475,7 +504,7 @@
 
 <script>
   const STRAVA_CLIENT_ID = '258624';
-    const STRAVA_REDIRECT = 'https://vanessaching.github.io/personalized-running/index.html';
+  const STRAVA_REDIRECT = 'https://vanessaching.github.io/personalized-running/';
   const SUPABASE_URL = 'https://trsrsplijzjmytmooyyi.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyc3JzcGxpanpqbXl0bW9veXlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MjkyNTgsImV4cCI6MjA5NzIwNTI1OH0.TiC-0Eid8Btii-x4XBbhEVO63dHDN90gcbWKDjRGZNs';
   const { createClient } = supabase;
@@ -485,164 +514,45 @@
   let authMode = 'login';
   let activeDays = [];
   let todayPlan = null;
+  let useKm = true; // unit preference
+  let stretchTimers = {}; // active timers per stretch index
+  let stretchCompleted = {}; // completed stretches
+  let currentStretchTab = 'pre';
 
-
-  // ── strava ──
-  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&approval_prompt=force&scope=activity:read_all`;
-
-  function stravaConnect() {
-    window.location.href = STRAVA_AUTH_URL;
-  }
-
-  async function handleStravaCallback() {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    if (!code) return;
-
-    // clean URL
-    window.history.replaceState({}, document.title, window.location.pathname);
-
-    showToast('connecting Strava...');
-
-    // exchange code for token via Strava
-    const res = await fetch('https://www.strava.com/oauth/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        client_id: STRAVA_CLIENT_ID,
-        client_secret: '2df7cd89da4d800b4c5b05ff0d7e97c091b201ea',
-        code,
-        grant_type: 'authorization_code'
-      })
-    });
-
-    const token = await res.json();
-    if (!token.access_token) { showToast('strava connection failed'); return; }
-
-    // save token to supabase for this user
-    await db.from('strava_tokens').upsert({
-      user_id: currentUser.id,
-      access_token: token.access_token,
-      refresh_token: token.refresh_token,
-      expires_at: token.expires_at,
-      athlete_id: token.athlete?.id,
-      athlete_name: token.athlete?.firstname + ' ' + token.athlete?.lastname,
-    }, { onConflict: 'user_id' });
-
-    updateStravaUI(true, token.athlete?.firstname);
-    await importStravaRuns(token.access_token);
-  }
-
-  function updateStravaUI(connected, name) {
-    const dot = document.getElementById('strava-dot');
-    const btn = document.getElementById('strava-btn');
-    const txt = document.getElementById('strava-status-text');
-    if (!dot) return;
-    if (connected) {
-      dot.classList.add('on'); dot.classList.remove('off');
-      btn.textContent = 'disconnect'; btn.classList.add('on');
-      btn.onclick = stravaDisconnect;
-      txt.textContent = name ? `connected as ${name}` : 'connected';
-    } else {
-      dot.classList.remove('on'); dot.classList.add('off');
-      btn.textContent = 'connect →'; btn.classList.remove('on');
-      btn.onclick = stravaConnect;
-      txt.textContent = '';
-    }
-  }
-
-  async function checkStravaConnection() {
-    if (!currentUser) return;
-    const { data } = await db.from('strava_tokens').select('*').eq('user_id', currentUser.id).maybeSingle();
-    if (data) updateStravaUI(true, data.athlete_name?.split(' ')[0]);
-    else updateStravaUI(false);
-  }
-
-  async function stravaDisconnect() {
-    if (!confirm('disconnect Strava?')) return;
-    await db.from('strava_tokens').delete().eq('user_id', currentUser.id);
-    updateStravaUI(false);
-    showToast('Strava disconnected');
-  }
-
-  async function importStravaRuns(accessToken) {
-    showToast('importing runs from Strava...');
-    const res = await fetch('https://www.strava.com/api/v3/athlete/activities?per_page=100', {
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-    const activities = await res.json();
-    const runs = activities.filter(a => a.type === 'Run');
-
-    let imported = 0;
-    for (const r of runs) {
-      const date = r.start_date_local.split('T')[0];
-      const distKm = (r.distance / 1000).toFixed(2);
-      const paceSecPerKm = r.moving_time / (r.distance / 1000);
-      const paceMin = Math.floor(paceSecPerKm / 60);
-      const paceSec = Math.round(paceSecPerKm % 60);
-      const pace = `${paceMin}:${paceSec.toString().padStart(2,'0')}`;
-
-      const { error } = await db.from('runs').upsert({
-        user_id: currentUser.id,
-        run_date: date,
-        distance_km: parseFloat(distKm),
-        pace_per_km: pace,
-        source: 'strava',
-        strava_id: r.id.toString(),
-        notes: r.name !== 'Morning Run' && r.name !== 'Afternoon Run' && r.name !== 'Evening Run' ? r.name : null,
-      }, { onConflict: 'user_id,strava_id' });
-      if (!error) imported++;
-    }
-
-    showToast(`imported ${imported} runs from Strava!`);
+  // ── unit toggle ──
+  function toggleUnit() {
+    useKm = !useKm;
+    const sw = document.getElementById('unit-switch');
+    sw.classList.toggle('km', useKm);
+    document.querySelectorAll('.unit-lbl').forEach(el => el.textContent = useKm ? 'km' : 'mi');
+    document.getElementById('m-unit').textContent = useKm ? 'km' : 'mi';
+    document.getElementById('m-pace-unit').textContent = useKm ? '/km' : '/mi';
+    localStorage.setItem('useKm', useKm ? '1' : '0');
     loadDashboard();
     loadProgress();
   }
 
-  // ── profile dropdown ──
-  function toggleProfileDropdown(e) {
-    e.stopPropagation();
-    document.getElementById('profile-dropdown').classList.toggle('open');
-  }
-  document.addEventListener('click', (e) => {
-    if (document.getElementById('app-screen').style.display === 'none') return;
-    if (!e.target.closest('#user-pill')) {
-      document.getElementById('profile-dropdown')?.classList.remove('open');
-    }
-  });
-
-  function populateProfile(user) {
-    document.getElementById('profile-name').value = user.user_metadata?.display_name || '';
-    document.getElementById('profile-email').value = user.email || '';
+  function distDisplay(km) {
+    if (useKm) return km.toFixed(1);
+    return (km * 0.621371).toFixed(1);
   }
 
-  async function saveProfile() {
-    const name = document.getElementById('profile-name').value.trim();
-    const email = document.getElementById('profile-email').value.trim();
-    const password = document.getElementById('profile-password').value;
-    const updates = {};
-    if (email && email !== currentUser.email) updates.email = email;
-    if (password) updates.password = password;
-    if (Object.keys(updates).length) {
-      const { error } = await db.auth.updateUser(updates);
-      if (error) { showToast('error: ' + error.message); return; }
-    }
-    if (name) {
-      const { error } = await db.auth.updateUser({ data: { display_name: name } });
-      if (error) { showToast('error: ' + error.message); return; }
-      document.getElementById('user-pill').childNodes[0].textContent = name;
-    }
-    document.getElementById('profile-password').value = '';
-    document.getElementById('profile-dropdown').classList.remove('open');
-    showToast('profile updated!');
+  function paceDisplay(paceKm) {
+    // paceKm is "6:30" string (min/km)
+    if (!paceKm) return '—';
+    if (useKm) return paceKm;
+    const secs = paceToSec(paceKm);
+    // pace per mile = pace per km * 1.60934
+    const secsMi = secs * 1.60934;
+    return secToPace(secsMi);
   }
 
   // ── auth ──
   function switchAuthTab(mode) {
     authMode = mode;
-    document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && mode === 'login') || (i === 1 && mode === 'signup')));
-    document.getElementById('auth-name').style.display = mode === 'signup' ? 'block' : 'none';
-    document.getElementById('auth-btn').textContent = mode === 'login' ? 'log in' : 'create account';
+    document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&mode==='login')||(i===1&&mode==='signup')));
+    document.getElementById('auth-name').style.display = mode==='signup' ? 'block' : 'none';
+    document.getElementById('auth-btn').textContent = mode==='login' ? 'log in' : 'create account';
     document.getElementById('auth-error').style.display = 'none';
   }
 
@@ -656,7 +566,7 @@
     if (authMode === 'signup') {
       const { error } = await db.auth.signUp({ email, password, options: { data: { display_name: name || email.split('@')[0] } } });
       if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
-      showToast('account created! check your email to confirm.');
+      showToast('account created! you can now log in.');
     } else {
       const { data, error } = await db.auth.signInWithPassword({ email, password });
       if (error) { errEl.textContent = 'wrong email or password'; errEl.style.display = 'block'; return; }
@@ -675,8 +585,13 @@
     currentUser = user;
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
-    const pillName = user.user_metadata?.display_name || user.email.split('@')[0];
-    document.getElementById('user-pill').childNodes[0].textContent = pillName;
+    const name = user.user_metadata?.display_name || user.email.split('@')[0];
+    document.getElementById('user-pill').childNodes[0].textContent = name;
+    useKm = localStorage.getItem('useKm') !== '0';
+    document.getElementById('unit-switch').classList.toggle('km', useKm);
+    document.querySelectorAll('.unit-lbl').forEach(el => el.textContent = useKm ? 'km' : 'mi');
+    document.getElementById('m-unit').textContent = useKm ? 'km' : 'mi';
+    document.getElementById('m-pace-unit').textContent = useKm ? '/km' : '/mi';
     loadDashboard();
     loadStretchGrid('pre');
     loadProgress();
@@ -684,6 +599,7 @@
     checkStravaConnection();
     handleStravaCallback();
     populateProfile(user);
+    renderQuiz();
   }
 
   window.addEventListener('load', async () => {
@@ -692,11 +608,38 @@
     document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
   });
 
+  // ── profile dropdown ──
+  function toggleProfileDropdown(e) {
+    e.stopPropagation();
+    document.getElementById('profile-dropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', (e) => {
+    if (document.getElementById('app-screen').style.display === 'none') return;
+    if (!e.target.closest('#user-pill')) document.getElementById('profile-dropdown')?.classList.remove('open');
+  });
+  function populateProfile(user) {
+    document.getElementById('profile-name').value = user.user_metadata?.display_name || '';
+    document.getElementById('profile-email').value = user.email || '';
+  }
+  async function saveProfile() {
+    const name = document.getElementById('profile-name').value.trim();
+    const email = document.getElementById('profile-email').value.trim();
+    const password = document.getElementById('profile-password').value;
+    const updates = {};
+    if (email && email !== currentUser.email) updates.email = email;
+    if (password) updates.password = password;
+    if (Object.keys(updates).length) { const { error } = await db.auth.updateUser(updates); if (error) { showToast('error: '+error.message); return; } }
+    if (name) { await db.auth.updateUser({ data: { display_name: name } }); document.getElementById('user-pill').childNodes[0].textContent = name; }
+    document.getElementById('profile-password').value = '';
+    document.getElementById('profile-dropdown').classList.remove('open');
+    showToast('profile updated!');
+  }
+
   // ── nav ──
   function switchView(name, btn) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('view-' + name).classList.add('active');
+    document.getElementById('view-'+name).classList.add('active');
     if (btn) btn.classList.add('active');
   }
 
@@ -704,73 +647,66 @@
   async function loadDashboard() {
     const uid = currentUser.id;
     const weekStart = getWeekStart();
-    const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate() + 7);
-    const { data: runs } = await db.from('runs').select('*').eq('user_id', uid).gte('run_date', weekStart.toISOString().split('T')[0]).lt('run_date', weekEnd.toISOString().split('T')[0]).order('run_date');
-    const { data: lastWeekRuns } = await db.from('runs').select('distance_km').eq('user_id', uid).gte('run_date', new Date(weekStart.getTime() - 7*86400000).toISOString().split('T')[0]).lt('run_date', weekStart.toISOString().split('T')[0]);
-    const { data: allRuns } = await db.from('runs').select('*').eq('user_id', uid).order('run_date', { ascending: false });
+    const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate()+7);
+    const { data: runs } = await db.from('runs').select('*').eq('user_id',uid).gte('run_date',weekStart.toISOString().split('T')[0]).lt('run_date',weekEnd.toISOString().split('T')[0]).order('run_date');
+    const { data: lastWeekRuns } = await db.from('runs').select('distance_km').eq('user_id',uid).gte('run_date',new Date(weekStart.getTime()-7*86400000).toISOString().split('T')[0]).lt('run_date',weekStart.toISOString().split('T')[0]);
+    const { data: allRuns } = await db.from('runs').select('*').eq('user_id',uid).order('run_date',{ascending:false});
 
-    const weekKm = (runs||[]).reduce((s,r) => s+(r.distance_km||0), 0);
-    const lastKm = (lastWeekRuns||[]).reduce((s,r) => s+(r.distance_km||0), 0);
+    const weekKm = (runs||[]).reduce((s,r)=>s+(r.distance_km||0),0);
+    const lastKm = (lastWeekRuns||[]).reduce((s,r)=>s+(r.distance_km||0),0);
     const paces = (runs||[]).filter(r=>r.pace_per_km).map(r=>paceToSec(r.pace_per_km));
     const avgPace = paces.length ? paces.reduce((a,b)=>a+b,0)/paces.length : null;
 
-    document.getElementById('m-weekly-km').innerHTML = weekKm.toFixed(1) + '<span class="metric-unit">km</span>';
+    document.getElementById('m-weekly-km').childNodes[0].textContent = distDisplay(weekKm);
     const diff = weekKm - lastKm;
     const deltaEl = document.getElementById('m-weekly-delta');
-    if (lastKm > 0) { deltaEl.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + ' vs last week'; deltaEl.className = 'metric-delta' + (diff >= 0 ? '' : ' neg'); }
-    document.getElementById('m-pace').innerHTML = avgPace ? secToPace(avgPace) + '<span class="metric-unit">/km</span>' : '—<span class="metric-unit">/km</span>';
+    if (lastKm > 0) { deltaEl.textContent = (diff>=0?'+':'')+distDisplay(Math.abs(diff))+' vs last week'; deltaEl.className='metric-delta'+(diff>=0?'':' neg'); }
+    document.getElementById('m-pace').childNodes[0].textContent = avgPace ? paceDisplay(secToPace(avgPace)) : '—';
     document.getElementById('m-total').textContent = (allRuns||[]).length;
     document.getElementById('m-total-note').textContent = 'all time';
     const streak = calcStreak(allRuns||[]);
-    document.getElementById('m-streak').innerHTML = streak + '<span class="metric-unit">wks</span>';
+    document.getElementById('m-streak').childNodes[0].textContent = streak;
     document.getElementById('m-streak-note').textContent = streak > 0 ? 'keep it up!' : 'start your streak!';
 
-    // week strip
     const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const today = new Date().toLocaleDateString('en-CA');
-    document.getElementById('week-days-strip').innerHTML = days.map((d, i) => {
-      const date = new Date(weekStart); date.setDate(date.getDate() + i);
+    document.getElementById('week-days-strip').innerHTML = days.map((d,i) => {
+      const date = new Date(weekStart); date.setDate(date.getDate()+i);
       const dateStr = date.toLocaleDateString('en-CA');
-      const run = (runs||[]).find(r => r.run_date === dateStr);
-      const isToday = dateStr === today;
-      const cls = run ? (isToday ? 'today' : 'done') : (isToday ? 'today' : 'rest');
-      const lbl = run ? (run.distance_km?.toFixed(1) || '✓') : (isToday ? '→' : '');
-      return `<div class="day-col"><div class="day-name">${d[0]}</div><div class="day-bubble ${cls}">${lbl}</div><div class="day-km">${run ? run.distance_km?.toFixed(1)+'km' : isToday ? 'today' : ''}</div></div>`;
+      const run = (runs||[]).find(r=>r.run_date===dateStr);
+      const isToday = dateStr===today;
+      const cls = run?(isToday?'today':'done'):(isToday?'today':'rest');
+      const lbl = run?(distDisplay(run.distance_km||0)||'✓'):(isToday?'→':'');
+      return `<div class="day-col"><div class="day-name">${d[0]}</div><div class="day-bubble ${cls}">${lbl}</div><div class="day-km">${run?distDisplay(run.distance_km||0)+(useKm?'km':'mi'):isToday?'today':''}</div></div>`;
     }).join('');
 
-    // today card
-    const { data: plan } = await db.from('plans').select('*').eq('user_id', uid).eq('plan_date', today).maybeSingle();
+    const { data: plan } = await db.from('plans').select('*').eq('user_id',uid).eq('plan_date',today).maybeSingle();
     todayPlan = plan;
-    const todayRun = (runs||[]).find(r => r.run_date === today);
-    const dow = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+    const todayRun = (runs||[]).find(r=>r.run_date===today);
+    const dow = new Date().toLocaleDateString('en-US',{weekday:'long'}).toLowerCase();
     document.getElementById('today-eyebrow').textContent = `today · ${dow}`;
     if (todayRun) {
       document.getElementById('today-title').textContent = 'run logged ✓';
-      document.getElementById('today-detail').textContent = `${todayRun.distance_km}km · effort ${todayRun.effort||'—'} · ${todayRun.notes||'good work!'}`;
-      document.getElementById('today-btn').textContent = 'log another →';
+      document.getElementById('today-detail').textContent = `${distDisplay(todayRun.distance_km)}${useKm?'km':'mi'} · effort ${todayRun.effort||'—'} · ${todayRun.notes||'good work!'}`;
     } else if (plan) {
       document.getElementById('today-title').textContent = plan.run_title;
       document.getElementById('today-detail').textContent = plan.run_detail;
-      document.getElementById('today-btn').textContent = 'log this run →';
     } else {
       document.getElementById('today-title').textContent = 'no run scheduled';
       document.getElementById('today-detail').textContent = 'generate a plan or log a run manually under sources.';
-      document.getElementById('today-btn').textContent = 'log a run →';
     }
 
-    // recent runs
     const recentEl = document.getElementById('recent-runs-list');
-    if (!allRuns || !allRuns.length) { recentEl.innerHTML = '<div class="empty">no runs yet — log your first one!</div>'; return; }
-    const effortLabel = e => e <= 2 ? 'easy' : e === 3 ? 'moderate' : 'hard';
-    const dotClass = r => r.effort <= 2 ? 'easy' : r.effort >= 4 ? 'tempo' : 'long';
-    recentEl.innerHTML = allRuns.slice(0,5).map(r => `
+    if (!allRuns||!allRuns.length) { recentEl.innerHTML = '<div class="empty">no runs yet — log your first one!</div>'; return; }
+    const dotClass = r => r.effort<=2?'easy':r.effort>=4?'tempo':'long';
+    recentEl.innerHTML = allRuns.slice(0,5).map(r=>`
       <div class="run-row">
         <div class="run-dot ${dotClass(r)}"></div>
         <div class="run-info">
-          <div class="run-title">${r.notes || effortLabel(r.effort) + ' run'}</div>
-          <div class="run-meta">${r.run_date}${r.pace_per_km ? ' · ' + r.pace_per_km + '/km' : ''}${r.shoes ? ' · ' + r.shoes : ''}</div>
+          <div class="run-title">${r.notes||(['easy run','easy run','moderate run','hard run','hard run'][r.effort-1]||'run')}</div>
+          <div class="run-meta">${r.run_date}${r.pace_per_km?' · '+paceDisplay(r.pace_per_km)+'/'+(useKm?'km':'mi'):''}${r.shoes?' · '+r.shoes:''}</div>
         </div>
-        <div class="run-km">${r.distance_km}km</div>
+        <div class="run-km">${distDisplay(r.distance_km)}${useKm?'km':'mi'}</div>
         <div class="run-effort e${r.effort||3}">effort ${r.effort||'—'}</div>
       </div>`).join('');
   }
@@ -780,45 +716,46 @@
     btn.classList.toggle('on');
     const day = btn.dataset.day;
     if (btn.classList.contains('on')) { if (!activeDays.includes(day)) activeDays.push(day); }
-    else { activeDays = activeDays.filter(d => d !== day); }
+    else { activeDays = activeDays.filter(d=>d!==day); }
   }
 
   async function generatePlan() {
     if (!activeDays.length) { showToast('pick at least one day first'); return; }
     const goal = document.getElementById('goal-select').value;
     const uid = currentUser.id;
-    const { data: allRuns } = await db.from('runs').select('run_date').eq('user_id', uid);
-    const weekNum = Math.max(1, Math.ceil(((allRuns||[]).length) / activeDays.length));
-    const plans = buildPlan(activeDays, goal, weekNum);
+    const { data: allRuns } = await db.from('runs').select('run_date').eq('user_id',uid);
+    const weekNum = Math.max(1,Math.ceil(((allRuns||[]).length)/activeDays.length));
+    const plans = buildPlan(activeDays,goal,weekNum);
     const weekStart = getWeekStart();
-    await db.from('plans').delete().eq('user_id', uid).gte('plan_date', weekStart.toISOString().split('T')[0]);
-    await db.from('plans').insert(plans.map(p => ({ user_id: uid, plan_date: p.date, run_title: p.title, run_detail: p.detail, is_rest: p.rest })));
+    await db.from('plans').delete().eq('user_id',uid).gte('plan_date',weekStart.toISOString().split('T')[0]);
+    await db.from('plans').insert(plans.map(p=>({user_id:uid,plan_date:p.date,run_title:p.title,run_detail:p.detail,is_rest:p.rest})));
     renderPlanList(plans);
     const totalWeeks = {habit:6,'5k':8,'10k':12,speed:8,half:16}[goal]||8;
-    const pct = Math.min(100, Math.round((weekNum/totalWeeks)*100));
+    const pct = Math.min(100,Math.round((weekNum/totalWeeks)*100));
     document.getElementById('plan-progress-wrap').style.display = 'block';
     document.getElementById('plan-progress-label').textContent = `week ${weekNum} of ${totalWeeks}`;
-    document.getElementById('plan-progress-pct').textContent = pct + '%';
-    document.getElementById('plan-progress-fill').style.width = pct + '%';
+    document.getElementById('plan-progress-pct').textContent = pct+'%';
+    document.getElementById('plan-progress-fill').style.width = pct+'%';
     showToast('plan generated!');
     loadDashboard();
   }
 
-  function buildPlan(days, goal, weekNum) {
+  function buildPlan(days,goal,weekNum) {
     const orderedDays = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const weekStart = getWeekStart();
+    const u = useKm ? 1 : 0.621371;
     const templates = {
-      '5k': [{title:'easy run',detail:`${(2+weekNum*0.3).toFixed(1)}km · conversational pace`},{title:'interval run',detail:`${Math.max(2,weekNum-1)}× 2 min fast, 2 min easy`},{title:'long slow run',detail:`${(3+weekNum*0.4).toFixed(1)}km · slowest comfortable pace`}],
-      '10k': [{title:'easy run',detail:`${(3+weekNum*0.4).toFixed(1)}km · zone 2`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}km comfortably hard`},{title:'long run',detail:`${(5+weekNum*0.5).toFixed(1)}km · easy effort`}],
-      habit: [{title:'easy jog',detail:`${(1.5+weekNum*0.2).toFixed(1)}km · just show up`},{title:'walk-run',detail:`2km alternating 1 min run / 1 min walk`},{title:'longer easy run',detail:`${(2+weekNum*0.3).toFixed(1)}km · relaxed`}],
-      speed: [{title:'strides',detail:`4× 100m fast strides with full recovery`},{title:'fartlek',detail:`${(3+weekNum*0.3).toFixed(1)}km with random surges`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}km at 10K effort`}],
-      half: [{title:'easy run',detail:`${(4+weekNum*0.5).toFixed(1)}km · easy effort`},{title:'mid-week medium',detail:`${(5+weekNum*0.4).toFixed(1)}km · moderate`},{title:'long run',detail:`${(7+weekNum*0.8).toFixed(1)}km · easy pace`}],
+      '5k':[{title:'easy run',detail:`${(2+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · conversational pace`},{title:'interval run',detail:`${Math.max(2,weekNum-1)}× 2 min fast, 2 min easy`},{title:'long slow run',detail:`${(3+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · slowest comfortable pace`}],
+      '10k':[{title:'easy run',detail:`${(3+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · zone 2`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} comfortably hard`},{title:'long run',detail:`${(5+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort`}],
+      habit:[{title:'easy jog',detail:`${(1.5+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} · just show up`},{title:'walk-run',detail:`${useKm?'2km':'1.2mi'} alternating 1 min run / 1 min walk`},{title:'longer easy run',detail:`${(2+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · relaxed`}],
+      speed:[{title:'strides',detail:'4× 100m fast strides with full recovery'},{title:'fartlek',detail:`${(3+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} with random surges`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} at 10K effort`}],
+      half:[{title:'easy run',detail:`${(4+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort`},{title:'mid-week medium',detail:`${(5+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · moderate`},{title:'long run',detail:`${(7+weekNum*0.8).toFixed(1)}${useKm?'km':'mi'} · easy pace`}],
     }[goal]||[];
     let runIdx = 0;
-    return orderedDays.map((day, i) => {
+    return orderedDays.map((day,i) => {
       const date = new Date(weekStart); date.setDate(date.getDate()+i);
       const dateStr = date.toLocaleDateString('en-CA');
-      if (days.includes(day) && runIdx < templates.length) { const t = templates[runIdx++]; return {date:dateStr,day,title:t.title,detail:t.detail,rest:false}; }
+      if (days.includes(day)&&runIdx<templates.length) { const t=templates[runIdx++]; return {date:dateStr,day,title:t.title,detail:t.detail,rest:false}; }
       return {date:dateStr,day,title:'rest day',detail:'stretch, walk, recover',rest:true};
     });
   }
@@ -826,140 +763,403 @@
   function renderPlanList(plans) {
     const today = new Date().toLocaleDateString('en-CA');
     document.getElementById('week-runs-list').innerHTML = plans.map(p => {
-      const isToday = p.date === today, isPast = p.date < today;
-      const badge = isPast ? 'done' : isToday ? 'today' : p.rest ? 'rest' : 'upcoming';
-      const dotCls = p.rest ? 'rest-day' : isPast ? 'done-day' : 'run-day';
+      const isToday=p.date===today, isPast=p.date<today;
+      const badge=isPast?'done':isToday?'today':p.rest?'rest':'upcoming';
+      const dotCls=p.rest?'rest-day':isPast?'done-day':'run-day';
       return `<div class="plan-row ${isToday?'is-today':''}"><div class="plan-dot ${dotCls}"></div><div class="plan-info"><div class="plan-title">${p.title}</div><div class="plan-detail">${p.detail}</div></div><div class="plan-day">${p.day}</div><div class="plan-badge ${badge}">${isPast?'done ✓':isToday?'today':p.rest?'rest':'upcoming'}</div></div>`;
     }).join('');
   }
 
-  // ── log run ──
-  async function logRunManual() {
-    const dist = parseFloat(document.getElementById('log-dist').value);
-    const date = document.getElementById('log-date').value;
-    if (!dist || !date) { showToast('fill in distance and date'); return; }
-    await saveRun({ distance_km: dist, pace_per_km: document.getElementById('log-pace').value, run_date: date, effort: parseInt(document.getElementById('log-effort').value), shoes: document.getElementById('log-shoes').value, notes: document.getElementById('log-notes').value });
-    ['log-dist','log-pace','log-notes','log-shoes'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
-  }
-
-  async function saveRun(data) {
-    const { error } = await db.from('runs').insert({ user_id: currentUser.id, ...data });
-    if (error) { showToast('error saving run'); return; }
-    showToast('run logged!');
-    if (data.shoes) updateShoesMileage(data.shoes, data.distance_km);
-    loadDashboard(); loadProgress();
-  }
-
-  function openLogModal() {
-    document.getElementById('log-modal-title').textContent = todayPlan ? `log: ${todayPlan.run_title}` : "log today's run";
-    document.getElementById('log-modal').classList.add('open');
-  }
-  function closeLogModal() { document.getElementById('log-modal').classList.remove('open'); }
-
-  async function submitLogModal() {
-    const dist = parseFloat(document.getElementById('modal-dist').value);
-    if (!dist) { showToast('enter a distance'); return; }
-    await saveRun({ distance_km: dist, pace_per_km: document.getElementById('modal-pace').value, run_date: new Date().toLocaleDateString('en-CA'), effort: parseInt(document.getElementById('modal-effort').value), notes: document.getElementById('modal-notes').value });
-    closeLogModal();
-    ['modal-dist','modal-pace','modal-notes'].forEach(id => document.getElementById(id).value = '');
-  }
-
-  // ── stretches ──
+  // ── stretches with timer ──
   const stretches = {
-    pre: [
-      {name:'leg swings',meta:'10 reps each side · 1 min',cue:'hold a wall, swing each leg front to back. keep your core tight and swing from the hip.'},
-      {name:'hip circles',meta:'10 reps each direction · 1 min',cue:'hands on hips, draw big circles. loosens the hip flexors before impact.'},
-      {name:'high knees',meta:'30 seconds · activation',cue:'drive knees to hip height alternating quickly. arms pump opposite to legs.'},
-      {name:'ankle rolls',meta:'10 reps each foot',cue:'lift one foot, roll the ankle slowly in both directions. warms the joint before impact.'},
-      {name:'glute activation',meta:'15 reps each side · clamshells',cue:'lie on side, knees bent. open top knee like a clamshell. really fire the glute.'},
-      {name:'arm swings',meta:'20 reps · upper body',cue:'cross arms in front then open wide behind. loosens shoulders for arm drive.'},
+    pre:[
+      {name:'leg swings',meta:'10 reps each side',cue:'hold a wall, swing each leg front to back. keep your core tight.',duration:60},
+      {name:'hip circles',meta:'10 reps each direction',cue:'hands on hips, draw big circles. loosens the hip flexors.',duration:60},
+      {name:'high knees',meta:'30 seconds',cue:'drive knees to hip height alternating quickly. arms pump opposite to legs.',duration:30},
+      {name:'ankle rolls',meta:'10 reps each foot',cue:'lift one foot, roll the ankle slowly in both directions.',duration:45},
+      {name:'glute activation',meta:'15 reps each side',cue:'lie on side, knees bent. open top knee like a clamshell.',duration:60},
+      {name:'arm swings',meta:'20 reps',cue:'cross arms in front then open wide behind. loosens shoulders.',duration:30},
     ],
-    post: [
-      {name:'standing quad stretch',meta:'30s each side · hold',cue:'stand on one leg, pull foot to glute. keep knees together. use a wall if needed.'},
-      {name:'calf stretch on wall',meta:'45s each side · hold',cue:'push against wall, back leg straight, heel down. lean until you feel the calf lengthen.'},
-      {name:'figure-four glute',meta:'45s each side · hold',cue:'lie on back, cross ankle over opposite knee. pull legs gently toward chest.'},
-      {name:"runner's lunge",meta:'45s each side · hip flexors',cue:'step forward into lunge, back knee down. sink hips forward and down.'},
-      {name:'hamstring stretch',meta:'30s each side · hold',cue:'lie on back, one leg up held with both hands. gentle pull, no bouncing.'},
-      {name:"child's pose",meta:'60 seconds · full back',cue:'kneel, stretch arms forward, forehead down. breathe into the lower back.'},
-      {name:'IT band stretch',meta:'30s each side · standing',cue:'cross one leg behind the other, lean away. feel the outside of hip and thigh.'},
+    post:[
+      {name:'standing quad stretch',meta:'30s each side',cue:'stand on one leg, pull foot to glute. keep knees together.',duration:60},
+      {name:'calf stretch on wall',meta:'45s each side',cue:'push against wall, back leg straight, heel down.',duration:90},
+      {name:'figure-four glute',meta:'45s each side',cue:'lie on back, cross ankle over opposite knee. pull legs toward chest.',duration:90},
+      {name:"runner's lunge",meta:'45s each side',cue:'step forward into lunge, back knee down. sink hips forward.',duration:90},
+      {name:'hamstring stretch',meta:'30s each side',cue:'lie on back, one leg up held with both hands. gentle pull.',duration:60},
+      {name:"child's pose",meta:'60 seconds',cue:'kneel, stretch arms forward, forehead down. breathe into the lower back.',duration:60},
+      {name:'IT band stretch',meta:'30s each side',cue:'cross one leg behind the other, lean away.',duration:60},
     ],
   };
 
   function loadStretchGrid(tab) {
-    document.getElementById('stretch-grid').innerHTML = stretches[tab].map(s =>
-      `<div class="stretch-card"><span class="stretch-tag ${tab}">${tab==='pre'?'pre-run':'post-run'}</span><div class="stretch-name">${s.name}</div><div class="stretch-meta">${s.meta}</div><div class="stretch-cue">${s.cue}</div></div>`
-    ).join('');
+    currentStretchTab = tab;
+    stretchTimers = {};
+    const list = stretches[tab];
+    const done = Object.keys(stretchCompleted[tab]||{}).filter(k=>stretchCompleted[tab][k]).length;
+    document.getElementById('stretch-progress').textContent = done > 0 ? `${done} / ${list.length} completed` : '';
+    document.getElementById('stretch-grid').innerHTML = list.map((s,i) => {
+      const isDone = stretchCompleted[tab]?.[i];
+      return `
+      <div class="stretch-card ${isDone?'completed':''}" id="sc-${i}">
+        <span class="stretch-tag ${tab}">${tab==='pre'?'pre-run':'post-run'}</span>
+        <div class="stretch-card-top">
+          <div><div class="stretch-name">${s.name}</div><div class="stretch-meta">${s.meta}</div></div>
+          <button class="stretch-check ${isDone?'done':''}" id="chk-${i}" onclick="toggleStretchDone(${i})">${isDone?'✓':''}</button>
+        </div>
+        <div class="stretch-cue">${s.cue}</div>
+        <div class="timer-ring" id="ring-${i}">
+          <svg width="60" height="60" viewBox="0 0 60 60">
+            <circle class="bg" cx="30" cy="30" r="26"/>
+            <circle class="fg" cx="30" cy="30" r="26" id="ring-fg-${i}"
+              stroke-dasharray="${2*Math.PI*26}"
+              stroke-dashoffset="0"/>
+          </svg>
+        </div>
+        <div class="timer-display" id="timer-${i}">${formatTime(s.duration)}</div>
+        <button class="timer-btn" id="tbtn-${i}" onclick="toggleTimer(${i},${s.duration})">${isDone?'✓ done':'start timer'}</button>
+      </div>`;
+    }).join('');
   }
 
-  function switchStretchTab(tab, btn) {
-    document.querySelectorAll('.stretch-tab').forEach(b => b.classList.remove('active'));
+  function switchStretchTab(tab,btn) {
+    // clear running timers
+    Object.values(stretchTimers).forEach(t=>clearInterval(t.interval));
+    stretchTimers = {};
+    document.querySelectorAll('.stretch-tab').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     loadStretchGrid(tab);
   }
 
-  // ── progress ──
+  function toggleTimer(idx,totalDuration) {
+    const tab = currentStretchTab;
+    if (stretchTimers[idx]?.running) {
+      clearInterval(stretchTimers[idx].interval);
+      stretchTimers[idx].running = false;
+      document.getElementById(`tbtn-${idx}`).textContent = 'resume';
+      document.getElementById(`tbtn-${idx}`).classList.remove('running');
+      return;
+    }
+    const remaining = stretchTimers[idx]?.remaining ?? totalDuration;
+    const btn = document.getElementById(`tbtn-${idx}`);
+    const display = document.getElementById(`timer-${idx}`);
+    const fgCircle = document.getElementById(`ring-fg-${idx}`);
+    const circumference = 2*Math.PI*26;
+    btn.textContent = 'pause'; btn.classList.add('running');
+    let left = remaining;
+    const interval = setInterval(() => {
+      left--;
+      stretchTimers[idx] = { interval, running: true, remaining: left };
+      display.textContent = formatTime(left);
+      const progress = 1 - (left/totalDuration);
+      fgCircle.style.strokeDashoffset = circumference * progress;
+      if (left <= 0) {
+        clearInterval(interval);
+        stretchTimers[idx] = null;
+        toggleStretchDone(idx);
+        btn.textContent = '✓ done'; btn.classList.remove('running');
+        display.textContent = '✓';
+        showToast(`${stretches[tab][idx].name} done!`);
+      }
+    }, 1000);
+    stretchTimers[idx] = { interval, running: true, remaining: left };
+  }
+
+  function toggleStretchDone(idx) {
+    const tab = currentStretchTab;
+    if (!stretchCompleted[tab]) stretchCompleted[tab] = {};
+    stretchCompleted[tab][idx] = !stretchCompleted[tab][idx];
+    const isDone = stretchCompleted[tab][idx];
+    const card = document.getElementById(`sc-${idx}`);
+    const chk = document.getElementById(`chk-${idx}`);
+    const btn = document.getElementById(`tbtn-${idx}`);
+    card?.classList.toggle('completed', isDone);
+    if (chk) { chk.classList.toggle('done',isDone); chk.textContent = isDone?'✓':''; }
+    if (btn && isDone) { btn.textContent='✓ done'; btn.classList.remove('running'); }
+    const list = stretches[tab];
+    const done = Object.keys(stretchCompleted[tab]).filter(k=>stretchCompleted[tab][k]).length;
+    document.getElementById('stretch-progress').textContent = done > 0 ? `${done} / ${list.length} completed` : '';
+  }
+
+  function formatTime(s) { return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`; }
+
+  // ── analytics / progress ──
   async function loadProgress() {
     if (!currentUser) return;
-    const { data: runs } = await db.from('runs').select('*').eq('user_id', currentUser.id).order('run_date').limit(56);
-    if (!runs || !runs.length) return;
+    const { data: runs } = await db.from('runs').select('*').eq('user_id',currentUser.id).order('run_date').limit(200);
+    if (!runs||!runs.length) return;
+
+    // group by week
     const weeks = {};
-    runs.forEach(r => { const ws = getWeekStart(new Date(r.run_date)).toLocaleDateString('en-CA'); if (!weeks[ws]) weeks[ws]=[]; weeks[ws].push(r); });
+    runs.forEach(r => { const ws=getWeekStart(new Date(r.run_date)).toLocaleDateString('en-CA'); if(!weeks[ws])weeks[ws]=[]; weeks[ws].push(r); });
     const weekKeys = Object.keys(weeks).sort().slice(-8);
-    const maxKm = Math.max(...weekKeys.map(w => weeks[w].reduce((s,r)=>s+(r.distance_km||0),0)),1);
+
+    // km chart
+    const maxKm = Math.max(...weekKeys.map(w=>weeks[w].reduce((s,r)=>s+(r.distance_km||0),0)),1);
+    document.getElementById('km-chart-sub').textContent = `last ${weekKeys.length} weeks · ${useKm?'km':'mi'}`;
     document.getElementById('km-chart').innerHTML = weekKeys.map(w => {
       const km = weeks[w].reduce((s,r)=>s+(r.distance_km||0),0);
       const h = Math.round((km/maxKm)*90);
-      const isLatest = w === weekKeys[weekKeys.length-1];
+      const isLatest = w===weekKeys[weekKeys.length-1];
       return `<div class="bar-col"><div class="bar ${isLatest?'':'dim'}" style="height:${Math.max(h,4)}px"></div><div class="bar-x">${new Date(w).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div></div>`;
     }).join('');
-    const weekPaces = weekKeys.map(w => { const p=weeks[w].filter(r=>r.pace_per_km).map(r=>paceToSec(r.pace_per_km)); return p.length?p.reduce((a,b)=>a+b,0)/p.length:null; });
+
+    // pace chart
+    const weekPaces = weekKeys.map(w=>{const p=weeks[w].filter(r=>r.pace_per_km).map(r=>paceToSec(r.pace_per_km));return p.length?p.reduce((a,b)=>a+b,0)/p.length:null;});
     const valid = weekPaces.filter(Boolean);
-    const maxP=Math.max(...valid,1), minP=Math.min(...valid,0);
-    document.getElementById('pace-chart').innerHTML = weekKeys.map((w,i) => {
+    const maxP=Math.max(...valid,1),minP=Math.min(...valid,0);
+    document.getElementById('pace-chart-sub').textContent = `avg pace per ${useKm?'km':'mi'} · lower = faster`;
+    document.getElementById('pace-chart').innerHTML = weekKeys.map((w,i)=>{
       const p=weekPaces[i];
       const h=p?Math.round(((maxP-p)/Math.max(maxP-minP,1))*80+10):4;
-      const isLatest = w === weekKeys[weekKeys.length-1];
+      const isLatest=w===weekKeys[weekKeys.length-1];
       return `<div class="bar-col"><div class="bar ${p&&isLatest?'':p?'dim':''}" style="height:${h}px"></div><div class="bar-x">${new Date(w).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div></div>`;
     }).join('');
+
+    // all time stats
+    const totalKm = runs.reduce((s,r)=>s+(r.distance_km||0),0);
+    const allPaces = runs.filter(r=>r.pace_per_km).map(r=>paceToSec(r.pace_per_km));
+    const bestPace = allPaces.length ? Math.min(...allPaces) : null;
+    const avgPaceAll = allPaces.length ? allPaces.reduce((a,b)=>a+b,0)/allPaces.length : null;
+    document.getElementById('alltime-stats').innerHTML = [
+      ['total distance', `${distDisplay(totalKm)} ${useKm?'km':'mi'}`],
+      ['total runs', runs.length],
+      ['avg distance/run', `${distDisplay(totalKm/runs.length)} ${useKm?'km':'mi'}`],
+      ['best pace', bestPace ? paceDisplay(secToPace(bestPace))+`/${useKm?'km':'mi'}` : '—'],
+      ['avg pace', avgPaceAll ? paceDisplay(secToPace(avgPaceAll))+`/${useKm?'km':'mi'}` : '—'],
+    ].map(([l,v])=>`<div class="stat-row"><span class="stat-row-label">${l}</span><span class="stat-row-val">${v}</span></div>`).join('');
+
+    // race time predictor using Riegel formula
+    if (avgPaceAll) {
+      const avgPaceSec = avgPaceAll;
+      // Riegel: T2 = T1 * (D2/D1)^1.06
+      const refDistKm = totalKm / runs.length;
+      const refTimeSec = avgPaceSec * refDistKm;
+      const riegel = (d) => refTimeSec * Math.pow(d/refDistKm, 1.06);
+      const fmtRace = (secs) => { const h=Math.floor(secs/3600),m=Math.floor((secs%3600)/60),s=Math.round(secs%60); return h>0?`${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`:`${m}:${s.toString().padStart(2,'0')}`; };
+      const races = useKm ? [['5K',5],['10K',10],['Half Marathon',21.1],['Marathon',42.2]] : [['5K',3.107],['10K',6.214],['Half Marathon',13.1],['Marathon',26.2]];
+      document.getElementById('pace-predictions').innerHTML = races.map(([name,dist])=>{
+        const t = riegel(dist);
+        return `<div class="prediction-row"><span class="pred-label">${name}</span><span class="pred-val">${fmtRace(t)}</span></div>`;
+      }).join('');
+    }
   }
 
   // ── shoes ──
   async function loadShoes() {
     if (!currentUser) return;
-    const { data } = await db.from('shoes').select('*').eq('user_id', currentUser.id);
+    const { data } = await db.from('shoes').select('*').eq('user_id',currentUser.id);
     const list = document.getElementById('shoe-list');
     if (!data||!data.length) { list.innerHTML='<div class="empty" style="padding:16px 0">no shoes added yet</div>'; return; }
-    list.innerHTML = data.map(s => {
-      const pct = Math.min(100, Math.round((s.current_km/s.max_km)*100));
-      const warn = pct >= 80;
-      return `<div class="shoe-card"><div class="shoe-header"><div class="shoe-name">${s.name}</div><div class="shoe-km">${s.current_km} / ${s.max_km} km</div></div><div class="shoe-bar"><div class="shoe-fill ${warn?'warn':''}" style="width:${pct}%"></div></div><div class="shoe-note">${warn?'⚠ approaching end of life':`${s.max_km-s.current_km} km remaining`}</div></div>`;
+    list.innerHTML = data.map(s=>{
+      const pct=Math.min(100,Math.round((s.current_km/s.max_km)*100));
+      const warn=pct>=80;
+      const cur=distDisplay(s.current_km), max=distDisplay(s.max_km), rem=distDisplay(s.max_km-s.current_km);
+      const unit=useKm?'km':'mi';
+      return `<div class="shoe-card"><div class="shoe-header"><div class="shoe-name">${s.name}</div><div class="shoe-km">${cur} / ${max} ${unit}</div></div><div class="shoe-bar"><div class="shoe-fill ${warn?'warn':''}" style="width:${pct}%"></div></div><div class="shoe-note">${warn?'⚠ approaching end of life':`${rem} ${unit} remaining`}</div></div>`;
     }).join('');
   }
 
   function openShoeModal() { document.getElementById('shoe-modal').classList.add('open'); }
   function closeShoeModal() { document.getElementById('shoe-modal').classList.remove('open'); }
-
   async function saveShoe() {
     const name = document.getElementById('shoe-name-input').value;
     if (!name) { showToast('enter a shoe name'); return; }
-    await db.from('shoes').insert({ user_id: currentUser.id, name, current_km: parseFloat(document.getElementById('shoe-miles-input').value)||0, max_km: parseFloat(document.getElementById('shoe-max-input').value)||800 });
+    let cur = parseFloat(document.getElementById('shoe-miles-input').value)||0;
+    let max = parseFloat(document.getElementById('shoe-max-input').value)||800;
+    if (!useKm) { cur = cur/0.621371; max = max/0.621371; }
+    await db.from('shoes').insert({user_id:currentUser.id,name,current_km:cur,max_km:max});
     closeShoeModal(); loadShoes(); showToast('shoes added!');
   }
-
-  async function updateShoesMileage(shoeName, km) {
+  async function updateShoesMileage(shoeName,km) {
     if (!shoeName||!km) return;
-    const { data } = await db.from('shoes').select('*').eq('user_id', currentUser.id).ilike('name',`%${shoeName}%`).single();
-    if (data) await db.from('shoes').update({ current_km: (data.current_km||0)+km }).eq('id', data.id);
+    const { data } = await db.from('shoes').select('*').eq('user_id',currentUser.id).ilike('name',`%${shoeName}%`).single();
+    if (data) await db.from('shoes').update({current_km:(data.current_km||0)+km}).eq('id',data.id);
+  }
+
+  // ── log run ──
+  async function logRunManual() {
+    let dist = parseFloat(document.getElementById('log-dist').value);
+    const date = document.getElementById('log-date').value;
+    if (!dist||!date) { showToast('fill in distance and date'); return; }
+    if (!useKm) dist = dist/0.621371;
+    await saveRun({distance_km:dist,pace_per_km:document.getElementById('log-pace').value,run_date:date,effort:parseInt(document.getElementById('log-effort').value),shoes:document.getElementById('log-shoes').value,notes:document.getElementById('log-notes').value});
+    ['log-dist','log-pace','log-notes','log-shoes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('log-date').value=new Date().toISOString().split('T')[0];
+  }
+  async function saveRun(data) {
+    const { error } = await db.from('runs').insert({user_id:currentUser.id,...data});
+    if (error) { showToast('error saving run'); return; }
+    showToast('run logged!');
+    if (data.shoes) updateShoesMileage(data.shoes,data.distance_km);
+    loadDashboard(); loadProgress();
+  }
+  function openLogModal() {
+    document.getElementById('log-modal-title').textContent = todayPlan?`log: ${todayPlan.run_title}`:"log today's run";
+    document.getElementById('log-modal').classList.add('open');
+  }
+  function closeLogModal() { document.getElementById('log-modal').classList.remove('open'); }
+  async function submitLogModal() {
+    let dist = parseFloat(document.getElementById('modal-dist').value);
+    if (!dist) { showToast('enter a distance'); return; }
+    if (!useKm) dist = dist/0.621371;
+    await saveRun({distance_km:dist,pace_per_km:document.getElementById('modal-pace').value,run_date:new Date().toLocaleDateString('en-CA'),effort:parseInt(document.getElementById('modal-effort').value),notes:document.getElementById('modal-notes').value});
+    closeLogModal();
+    ['modal-dist','modal-pace','modal-notes'].forEach(id=>document.getElementById(id).value='');
+  }
+
+  // ── strava ──
+  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(STRAVA_REDIRECT)}&approval_prompt=force&scope=activity:read_all`;
+  function stravaConnect() { window.location.href = STRAVA_AUTH_URL; }
+  function updateStravaUI(connected,name) {
+    const dot=document.getElementById('strava-dot'),btn=document.getElementById('strava-btn'),txt=document.getElementById('strava-status-text');
+    if (!dot) return;
+    dot.classList.toggle('on',connected);
+    btn.textContent=connected?'connected ✓':'connect →';
+    btn.classList.toggle('on',connected);
+    btn.onclick=connected?stravaDisconnect:stravaConnect;
+    txt.textContent=connected?(name?`synced as ${name}`:'connected'):'';
+  }
+  async function checkStravaConnection() {
+    if (!currentUser) return;
+    const { data } = await db.from('strava_tokens').select('*').eq('user_id',currentUser.id).maybeSingle();
+    if (data) updateStravaUI(true,data.athlete_name?.split(' ')[0]);
+    else updateStravaUI(false);
+  }
+  async function stravaDisconnect() {
+    if (!confirm('disconnect Strava?')) return;
+    await db.from('strava_tokens').delete().eq('user_id',currentUser.id);
+    updateStravaUI(false); showToast('Strava disconnected');
+  }
+  async function handleStravaCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (!code) return;
+    window.history.replaceState({},document.title,window.location.pathname);
+    showToast('connecting Strava...');
+    const res = await fetch('https://www.strava.com/oauth/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_id:STRAVA_CLIENT_ID,client_secret:'2df7cd89da4d800b4c5b05ff0d7e97c091b201ea',code,grant_type:'authorization_code'})});
+    const token = await res.json();
+    if (!token.access_token) { showToast('strava connection failed'); return; }
+    await db.from('strava_tokens').upsert({user_id:currentUser.id,access_token:token.access_token,refresh_token:token.refresh_token,expires_at:token.expires_at,athlete_id:token.athlete?.id,athlete_name:token.athlete?.firstname+' '+token.athlete?.lastname},{onConflict:'user_id'});
+    updateStravaUI(true,token.athlete?.firstname);
+    await importStravaRuns(token.access_token);
+  }
+  async function importStravaRuns(accessToken) {
+    showToast('importing runs from Strava...');
+    const res = await fetch('https://www.strava.com/api/v3/athlete/activities?per_page=100',{headers:{'Authorization':`Bearer ${accessToken}`}});
+    const activities = await res.json();
+    const runs = activities.filter(a=>a.type==='Run');
+    let imported=0;
+    for (const r of runs) {
+      const date=r.start_date_local.split('T')[0];
+      const distKm=(r.distance/1000).toFixed(2);
+      const paceSecPerKm=r.moving_time/(r.distance/1000);
+      const pace=secToPace(paceSecPerKm);
+      const { error } = await db.from('runs').upsert({user_id:currentUser.id,run_date:date,distance_km:parseFloat(distKm),pace_per_km:pace,source:'strava',strava_id:r.id.toString(),notes:!['Morning Run','Afternoon Run','Evening Run','Lunch Run'].includes(r.name)?r.name:null},{onConflict:'user_id,strava_id'});
+      if (!error) imported++;
+    }
+    showToast(`imported ${imported} runs from Strava!`);
+    loadDashboard(); loadProgress();
+  }
+
+  // ── diagnostic quiz ──
+  const quizQuestions = [
+    { q: 'How would you describe your current fitness level?', opts: ['Complete beginner — haven\'t exercised in a while','Somewhat active — walk/light exercise occasionally','Moderately fit — exercise 1-2x a week','Pretty fit — exercise 3+ times a week'] },
+    { q: 'Have you run before?', opts: ['Never','A little — ran once or twice','Some experience — ran casually','Yes — I\'ve done 5Ks or more'] },
+    { q: 'What\'s your main goal?', opts: ['Just get moving and build a habit','Complete my first 5K','Run a 10K or half marathon','Improve my speed and performance'] },
+    { q: 'How many days per week can you realistically run?', opts: ['1-2 days','3 days','4 days','5+ days'] },
+    { q: 'How long can you currently run without stopping?', opts: ['Less than 1 minute','1-5 minutes','5-15 minutes','15+ minutes'] },
+    { q: 'Do you have any injuries or physical limitations?', opts: ['None — I\'m good to go','Minor — I\'ll need to take it easy','Some — I should check with a doctor','Yes — running might not be ideal right now'] },
+  ];
+
+  let quizAnswers = {};
+  let quizStep = 0;
+
+  function renderQuiz() {
+    if (quizStep >= quizQuestions.length) { renderQuizResult(); return; }
+    const q = quizQuestions[quizStep];
+    document.getElementById('quiz-container').innerHTML = `
+      <div class="quiz-progress">${quizStep+1} of ${quizQuestions.length}</div>
+      <div class="quiz-card">
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((o,i)=>`<button class="quiz-opt ${quizAnswers[quizStep]===i?'selected':''}" onclick="selectQuizOpt(${i})">${o}</button>`).join('')}
+        </div>
+        <div class="quiz-nav">
+          ${quizStep>0?`<button class="quiz-btn secondary" onclick="quizBack()">← back</button>`:''}
+          <button class="quiz-btn" onclick="quizNext()" ${quizAnswers[quizStep]===undefined?'disabled style="opacity:0.4;cursor:default"':''}>next →</button>
+        </div>
+      </div>`;
+  }
+
+  function selectQuizOpt(i) { quizAnswers[quizStep]=i; renderQuiz(); }
+  function quizNext() { if (quizAnswers[quizStep]===undefined) return; quizStep++; renderQuiz(); }
+  function quizBack() { quizStep=Math.max(0,quizStep-1); renderQuiz(); }
+
+  function renderQuizResult() {
+    // score 0-3 across answers
+    const fitness = quizAnswers[0]||0;
+    const experience = quizAnswers[1]||0;
+    const goal = quizAnswers[2]||0;
+    const days = quizAnswers[3]||0;
+    const duration = quizAnswers[4]||0;
+    const injury = quizAnswers[5]||0;
+
+    let planType, badge, desc, planKey, suggestedDays;
+
+    if (injury >= 3) {
+      planType='Check with your doctor first';badge='⚠ hold off for now';
+      desc='Based on your answers, you should speak with a medical professional before starting a running program. Once cleared, come back and we\'ll build you a great beginner plan!';
+      planKey=null;
+    } else if (fitness<=1&&experience<=1&&duration<=1) {
+      planType='Walk-to-Run Starter';badge='🌱 complete beginner';
+      desc='You\'re starting from scratch — and that\'s great! Your plan will focus on building the habit first: short walk-run intervals that gradually shift toward more running. No pressure, just progress.';
+      planKey='habit'; suggestedDays=['Tue','Thu','Sat'];
+    } else if (goal<=1||experience<=1) {
+      planType='5K Builder';badge='🏃 5K ready';
+      desc='You have some base fitness and a solid goal. Your plan will build you up to running a 5K with a mix of easy runs, intervals, and a weekly long run. Expect to be 5K-ready in 6-8 weeks.';
+      planKey='5k'; suggestedDays=['Tue','Thu','Sat'];
+    } else if (goal<=2) {
+      planType='10K Training';badge='🚀 intermediate';
+      desc='You\'re past the beginner stage — time to push further. Your plan mixes tempo runs, long runs, and recovery days to get you 10K-ready while building your aerobic base.';
+      planKey='10k'; suggestedDays=['Tue','Thu','Sat','Sun'];
+    } else {
+      planType='Performance Plan';badge='⚡ advanced';
+      desc='You\'re already fit and want to get faster. Your plan focuses on speed work, tempo runs, and structured intervals alongside longer runs to push your performance.';
+      planKey='speed'; suggestedDays=['Mon','Tue','Thu','Fri','Sat'];
+    }
+
+    const dayCount = [2,3,4,5][days]||3;
+    if (suggestedDays) suggestedDays = suggestedDays.slice(0,dayCount);
+
+    document.getElementById('quiz-container').innerHTML = `
+      <div class="quiz-result">
+        <div class="quiz-result-badge">${badge}</div>
+        <h3>${planType}</h3>
+        <p>${desc}</p>
+        ${planKey?`<button class="result-apply-btn" onclick="applyQuizResult('${planKey}',${JSON.stringify(suggestedDays)})">apply this plan →</button>`:''}
+      </div>
+      <div style="margin-top:16px">
+        <button class="quiz-btn secondary" onclick="quizStep=0;quizAnswers={};renderQuiz()">retake quiz</button>
+      </div>`;
+  }
+
+  function applyQuizResult(planKey, days) {
+    document.getElementById('goal-select').value = planKey;
+    activeDays = days;
+    document.querySelectorAll('.day-toggle-btn').forEach(btn => {
+      btn.classList.toggle('on', days.includes(btn.dataset.day));
+    });
+    switchView('plan', document.querySelector('.nav-btn:nth-child(2)'));
+    showToast('plan settings applied! hit generate to build your week →');
   }
 
   // ── helpers ──
   function getWeekStart(date) { const d=date?new Date(date):new Date(); const day=d.getDay(); d.setDate(d.getDate()+(day===0?-6:1-day)); d.setHours(0,0,0,0); return d; }
-  function paceToSec(pace) { if (!pace||typeof pace!=='string') return 0; const p=pace.split(':'); return parseInt(p[0])*60+(parseInt(p[1])||0); }
+  function paceToSec(pace) { if(!pace||typeof pace!=='string') return 0; const p=pace.split(':'); return parseInt(p[0])*60+(parseInt(p[1])||0); }
   function secToPace(sec) { const m=Math.floor(sec/60),s=Math.round(sec%60); return `${m}:${s.toString().padStart(2,'0')}`; }
-  function calcStreak(runs) { if (!runs.length) return 0; const weeks=new Set(runs.map(r=>getWeekStart(new Date(r.run_date)).toLocaleDateString('en-CA'))); let streak=0,w=getWeekStart(); while(weeks.has(w.toLocaleDateString('en-CA'))){streak++;w.setDate(w.getDate()-7);} return streak; }
+  function calcStreak(runs) { if(!runs.length) return 0; const weeks=new Set(runs.map(r=>getWeekStart(new Date(r.run_date)).toLocaleDateString('en-CA'))); let streak=0,w=getWeekStart(); while(weeks.has(w.toLocaleDateString('en-CA'))){streak++;w.setDate(w.getDate()-7);} return streak; }
   function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
-  document.addEventListener('keydown', e => { if (e.key==='Escape') { closeLogModal(); closeShoeModal(); } });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeLogModal();closeShoeModal();} });
 </script>
 </body>
 </html>

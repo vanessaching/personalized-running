@@ -111,6 +111,32 @@
     .run-effort.e3 { background: #6B96C0; color: #EEF2FA; }
     .run-effort.e4,.run-effort.e5 { background: #2C3848; color: #EEF2FA; }
 
+
+    /* ── calendar ── */
+    .cal-wrap { margin-bottom: 28px; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .cal-month { font-size: 15px; font-weight: 700; color: #2C3848; }
+    .cal-nav { background: none; border: 1px solid #6B96C0; border-radius: 999px; padding: 5px 14px; font-size: 13px; color: #2C3848; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .cal-nav:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+    .cal-day-name { text-align: center; font-size: 10px; color: #6B7A8D; text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: 6px; font-weight: 700; }
+    .cal-cell { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #4A5A6E; background: #EEF2FA; border: 1px solid transparent; cursor: pointer; transition: all 0.15s; position: relative; gap: 2px; }
+    .cal-cell:hover { border-color: #6B96C0; }
+    .cal-cell.empty { background: transparent; cursor: default; }
+    .cal-cell.empty:hover { border-color: transparent; }
+    .cal-cell.has-run { background: #2C3848; color: #EEF2FA; }
+    .cal-cell.today { border-color: #2C3848; border-width: 2px; }
+    .cal-cell.today.has-run { box-shadow: 0 0 0 2px #9BB8D4, 0 0 0 4px #2C3848; }
+    .cal-cell.selected-day { background: #6B96C0; color: #EEF2FA; }
+    .cal-dot { width: 5px; height: 5px; border-radius: 50%; background: #6B96C0; }
+    .cal-cell.has-run .cal-dot { background: #B8D0E8; }
+    .cal-run-dist { font-size: 9px; opacity: 0.8; }
+    .cal-legend { display: flex; gap: 16px; margin-top: 10px; }
+    .cal-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #4A5A6E; }
+    .cal-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+    .plan-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+    .reset-week-btn { background: none; border: 1px solid #6B96C0; border-radius: 999px; padding: 9px 20px; font-size: 12px; color: #2C3848; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .reset-week-btn:hover { background: #2C3848; color: #EEF2FA; border-color: #2C3848; }
     /* ── plan ── */
     .plan-top { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
     .plan-card { background: #DCE9F5; border-radius: 16px; padding: 24px; border: 1.5px solid #4A7BAA; }
@@ -358,6 +384,10 @@
   <!-- plan -->
   <div id="view-plan" class="view">
     <h2 class="section-label">plan</h2>
+    <div class="plan-actions">
+      <button class="reset-week-btn" onclick="resetWeekPlan()">↺ reset this week's plan</button>
+    </div>
+    <div class="cal-wrap" id="cal-wrap"></div>
     <div class="plan-top">
       <div class="plan-card">
         <div class="plan-card-label">available days this week</div>
@@ -600,6 +630,7 @@
     handleStravaCallback();
     populateProfile(user);
     renderQuiz();
+    loadCalendar();
   }
 
   window.addEventListener('load', async () => {
@@ -641,6 +672,7 @@
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('view-'+name).classList.add('active');
     if (btn) btn.classList.add('active');
+    if (name === 'plan') loadCalendar();
   }
 
   // ── dashboard ──
@@ -745,11 +777,31 @@
     const weekStart = getWeekStart();
     const u = useKm ? 1 : 0.621371;
     const templates = {
-      '5k':[{title:'easy run',detail:`${(2+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · conversational pace`},{title:'interval run',detail:`${Math.max(2,weekNum-1)}× 2 min fast, 2 min easy`},{title:'long slow run',detail:`${(3+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · slowest comfortable pace`}],
-      '10k':[{title:'easy run',detail:`${(3+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · zone 2`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} comfortably hard`},{title:'long run',detail:`${(5+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort`}],
-      habit:[{title:'easy jog',detail:`${(1.5+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} · just show up`},{title:'walk-run',detail:`${useKm?'2km':'1.2mi'} alternating 1 min run / 1 min walk`},{title:'longer easy run',detail:`${(2+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · relaxed`}],
-      speed:[{title:'strides',detail:'4× 100m fast strides with full recovery'},{title:'fartlek',detail:`${(3+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} with random surges`},{title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} at 10K effort`}],
-      half:[{title:'easy run',detail:`${(4+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort`},{title:'mid-week medium',detail:`${(5+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · moderate`},{title:'long run',detail:`${(7+weekNum*0.8).toFixed(1)}${useKm?'km':'mi'} · easy pace`}],
+      '5k':[
+        {title:'walk/run intervals',detail:`alternating 1 min run, 2 min walk for ${(15+weekNum*2)}min · no pressure`},
+        {title:'easy run/walk',detail:`${(2+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · run when you can, walk when you need to`},
+        {title:'long easy effort',detail:`${(2.5+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · slowest comfortable pace`},
+      ],
+      '10k':[
+        {title:'easy run',detail:`${(3+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · zone 2, conversational pace`},
+        {title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} · comfortably hard effort`},
+        {title:'long run',detail:`${(5+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort, no stopping`},
+      ],
+      habit:[
+        {title:'brisk walk + jog',detail:`10 min walk warm-up, then jog ${(1+weekNum*0.15).toFixed(1)}${useKm?'km':'mi'} easy`},
+        {title:'walk/run intervals',detail:`20 min total · 1 min jog, 2 min walk, repeat · focus on breathing`},
+        {title:'easy walk/jog',detail:`${(1.5+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} · run/walk freely, just keep moving`},
+      ],
+      speed:[
+        {title:'strides',detail:'warm up 10 min easy, then 4× 100m fast strides with full recovery'},
+        {title:'fartlek',detail:`${(3+weekNum*0.3).toFixed(1)}${useKm?'km':'mi'} · pick up pace at lamp posts or landmarks`},
+        {title:'tempo run',detail:`${(2+weekNum*0.2).toFixed(1)}${useKm?'km':'mi'} at 10k effort · comfortably hard`},
+      ],
+      half:[
+        {title:'easy run',detail:`${(4+weekNum*0.5).toFixed(1)}${useKm?'km':'mi'} · easy effort, can hold a conversation`},
+        {title:'mid-week medium',detail:`${(5+weekNum*0.4).toFixed(1)}${useKm?'km':'mi'} · moderate pace`},
+        {title:'long run',detail:`${(7+weekNum*0.8).toFixed(1)}${useKm?'km':'mi'} · easy pace, fueling practice`},
+      ],
     }[goal]||[];
     let runIdx = 0;
     return orderedDays.map((day,i) => {
@@ -1075,7 +1127,7 @@
   let quizStep = 0;
 
   function renderQuiz() {
-    if (quizStep >= quizQuestions.length) { renderQuizResult(); return; }
+    if (quizStep >= quizQuestions.length) { renderQuizConfirm(); return; }
     const q = quizQuestions[quizStep];
     document.getElementById('quiz-container').innerHTML = `
       <div class="quiz-progress">${quizStep+1} of ${quizQuestions.length}</div>
@@ -1094,6 +1146,18 @@
   function selectQuizOpt(i) { quizAnswers[quizStep]=i; renderQuiz(); }
   function quizNext() { if (quizAnswers[quizStep]===undefined) return; quizStep++; renderQuiz(); }
   function quizBack() { quizStep=Math.max(0,quizStep-1); renderQuiz(); }
+
+  function renderQuizConfirm() {
+    document.getElementById('quiz-container').innerHTML = `
+      <div class="quiz-card">
+        <div class="quiz-q">ready to see your plan?</div>
+        <p style="font-size:13px;color:#4A5A6E;line-height:1.7;margin-bottom:20px">based on your answers we'll build a personalised training plan. you can always retake the quiz or adjust it manually.</p>
+        <div class="quiz-nav">
+          <button class="quiz-btn secondary" onclick="quizStep=quizQuestions.length-1;renderQuiz()">← go back</button>
+          <button class="quiz-btn" onclick="renderQuizResult()">see my plan →</button>
+        </div>
+      </div>`;
+  }
 
   function renderQuizResult() {
     // score 0-3 across answers
@@ -1151,6 +1215,79 @@
     });
     switchView('plan', document.querySelector('.nav-btn:nth-child(2)'));
     showToast('plan settings applied! hit generate to build your week →');
+  }
+
+
+  // ── calendar ──
+  let calYear = new Date().getFullYear();
+  let calMonth = new Date().getMonth();
+  let calRunData = {}; // date -> run info
+
+  async function loadCalendar() {
+    if (!currentUser) return;
+    const { data: runs } = await db.from('runs').select('run_date,distance_km').eq('user_id', currentUser.id);
+    calRunData = {};
+    (runs||[]).forEach(r => { calRunData[r.run_date] = r; });
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const monthNames = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+    const dayNames = ['mon','tue','wed','thu','fri','sat','sun'];
+    const today = new Date().toLocaleDateString('en-CA');
+    const firstDay = new Date(calYear, calMonth, 1);
+    const lastDay = new Date(calYear, calMonth+1, 0);
+    // adjust so week starts Monday
+    let startDow = firstDay.getDay(); // 0=Sun
+    startDow = startDow === 0 ? 6 : startDow - 1;
+    const totalDays = lastDay.getDate();
+
+    let cells = '';
+    dayNames.forEach(d => { cells += `<div class="cal-day-name">${d}</div>`; });
+    for (let i=0; i<startDow; i++) cells += `<div class="cal-cell empty"></div>`;
+    for (let d=1; d<=totalDays; d++) {
+      const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const run = calRunData[dateStr];
+      const isToday = dateStr === today;
+      const cls = `cal-cell ${run?'has-run':''} ${isToday?'today':''}`;
+      const dist = run ? `<span class="cal-run-dist">${distDisplay(run.distance_km)}${useKm?'k':'m'}</span>` : `<div class="cal-dot"></div>`;
+      cells += `<div class="${cls}" onclick="calSelectDay('${dateStr}')" title="${dateStr}"><span>${d}</span>${dist}</div>`;
+    }
+
+    document.getElementById('cal-wrap').innerHTML = `
+      <div class="cal-header">
+        <button class="cal-nav" onclick="calNav(-1)">← </button>
+        <div class="cal-month">${monthNames[calMonth]} ${calYear}</div>
+        <button class="cal-nav" onclick="calNav(1)"> →</button>
+      </div>
+      <div class="cal-grid">${cells}</div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#2C3848"></div>run logged</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#EEF2FA;border:1px solid #6B96C0"></div>no run</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="border:2px solid #2C3848"></div>today</div>
+      </div>`;
+  }
+
+  function calNav(dir) { calMonth += dir; if(calMonth>11){calMonth=0;calYear++;} if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+
+  function calSelectDay(dateStr) {
+    // pre-fill the log date and open log modal
+    document.getElementById('log-date').value = dateStr;
+    openLogModal();
+  }
+
+  async function resetWeekPlan() {
+    if (!confirm('reset this week\'s plan? your run history will be kept.')) return;
+    const uid = currentUser.id;
+    const weekStart = getWeekStart();
+    const weekEnd = new Date(weekStart); weekEnd.setDate(weekEnd.getDate()+7);
+    await db.from('plans').delete().eq('user_id',uid).gte('plan_date',weekStart.toISOString().split('T')[0]).lt('plan_date',weekEnd.toISOString().split('T')[0]);
+    document.getElementById('week-runs-list').innerHTML = '<div class="empty">plan cleared — pick your days and generate a new one</div>';
+    document.getElementById('plan-progress-wrap').style.display = 'none';
+    // reset day toggles
+    document.querySelectorAll('.day-toggle-btn').forEach(b=>b.classList.remove('on'));
+    activeDays = [];
+    showToast('week plan reset — run data kept ✓');
   }
 
   // ── helpers ──
